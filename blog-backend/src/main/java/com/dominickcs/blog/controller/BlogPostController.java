@@ -1,5 +1,6 @@
 package com.dominickcs.blog.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class BlogPostController {
 
   @PostMapping("/new-post")
   public String addNewBlogPost(@RequestBody BlogPostDTO blogPostDTO) {
+    LocalDateTime currentDate = LocalDateTime.now();
     BlogPost blogPost = new BlogPost();
     blogPost.setId(blogPostDTO.getId());
     blogPost.setBlogTags(blogPostDTO.getBlogTags());
@@ -29,6 +31,7 @@ public class BlogPostController {
     blogPost.setBlogComments(blogPostDTO.getBlogComments());
     blogPost.setBlogHeaderURL(blogPostDTO.getBlogHeaderURL());
     blogPost.setBlogTitle(blogPostDTO.getBlogTitle());
+    blogPost.setBlogPublishDate(currentDate);
     blogPostRepository.save(blogPost);
     return "New blog post added!\n" + blogPost.toString();
   }

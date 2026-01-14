@@ -1,5 +1,6 @@
 package com.dominickcs.blog.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Data;
@@ -14,4 +15,6 @@ public class BlogPostDTO {
   private List<String> blogComments;
   private int blogLikeCount;
   private int blogSaveCount;
+  private LocalDateTime blogPublishDate;
+  private LocalDateTime blogModifyDate;
 }

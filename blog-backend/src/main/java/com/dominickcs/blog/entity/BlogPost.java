@@ -1,5 +1,6 @@
 package com.dominickcs.blog.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -18,6 +19,12 @@ public class BlogPost {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private int id;
+
+  @Column(name = "blog_publish_date", nullable = false)
+  private LocalDateTime blogPublishDate;
+
+  @Column(name = "blog_modify_date", nullable = true)
+  private LocalDateTime blogModifyDate = null;
 
   @Column(name = "blog_post_header_url", nullable = true)
   private String blogHeaderURL;
