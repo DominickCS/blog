@@ -32,7 +32,7 @@ public class BlogPost {
   @Column(name = "blog_post_title", nullable = false)
   private String blogTitle;
 
-  @Column(name = "blog_post_body", nullable = false)
+  @Column(name = "blog_post_body", nullable = false, length = 65535)
   private String blogBody;
 
   @Column(name = "blog_post_tags", nullable = false)
