@@ -1,6 +1,7 @@
 package com.dominickcs.blog.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,11 @@ public class BlogPostController {
   @GetMapping("/all-posts")
   public List<BlogPost> getAllBlogPosts() {
     return blogPostRepository.findByOrderByBlogPublishDateDesc();
+  }
+
+  @PostMapping("/fetch-post")
+  public Optional<BlogPost> getBlogPost(@RequestBody BlogPostDTO blogPostDTO) throws Exception {
+    return blogPostRepository.findById(blogPostDTO.getId());
   }
 
   @PostMapping("/search")
