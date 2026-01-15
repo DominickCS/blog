@@ -2,6 +2,7 @@ package com.dominickcs.blog.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ public class BlogPost {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
-  private int id;
+  private UUID id;
 
   @Column(name = "blog_publish_date", nullable = false)
   private LocalDateTime blogPublishDate;
@@ -26,6 +27,7 @@ public class BlogPost {
   @Column(name = "blog_modify_date", nullable = true)
   private LocalDateTime blogModifyDate = null;
 
+  // Look Up Base64 Conversion
   @Column(name = "blog_post_header_url", nullable = true)
   private String blogHeaderURL;
 
@@ -39,12 +41,14 @@ public class BlogPost {
   private List<String> blogTags;
 
   @Column(name = "blog_post_comments", nullable = true)
-  private List<String> blogComments;
+  private List<BlogComment> blogComments;
 
   @Column(name = "blog_post_likes", nullable = true)
   private int blogLikeCount = 0;
 
   @Column(name = "blog_post_saves", nullable = true)
   private int blogSaveCount = 0;
+
+  // Author => User Entity
 
 }
