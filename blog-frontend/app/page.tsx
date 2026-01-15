@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [blogPosts, setBlogPosts] = useState([])
+  const [blogPostComments, setBlogPostComments] = useState([])
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
@@ -32,7 +33,9 @@ export default function HomePage() {
       </>
     )
   }
-  else {
+  else if (blogPosts.length > 0) {
+    console.log(blogPosts)
+
     const date = new Date(blogPosts[0].blogPublishDate).toLocaleDateString()
     return (
       <div className="max-w-sm mx-auto leading-8">
@@ -42,7 +45,7 @@ export default function HomePage() {
           <div className="flex">
             TAGS :
             {blogPosts[0].blogTags.map((tag: string) => {
-              return <p className="mx-2">{tag}</p>
+              return <p className="mx-2" key={tag}>{tag}</p>
             })}
           </div>
           <div className="flex">
@@ -57,7 +60,7 @@ export default function HomePage() {
             {blogPosts[0].blogComments.length > 0 ?
               <ul>
                 {blogPosts[0].blogComments.map(comment => {
-                  return <li key={blogPosts[0].id}>{comment}</li>
+                  return <li key={blogPosts[0].blogComments.commentId}>{comment.commentBody}</li>
                 })}
               </ul>
               :

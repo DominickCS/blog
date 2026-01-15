@@ -3,6 +3,8 @@ package com.dominickcs.blog.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -28,8 +31,10 @@ public class BlogCommentReply {
   @Column(name = "reply_like_count")
   private int replyLikeCount = 0;
 
-  @JoinColumn(name = "comment_replies", nullable = true)
+  @JoinColumn(name = "comment_id", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnoreProperties({ "commentReplies", "hibernateLazyInitializer", "handler" })
+  @ToString.Exclude
   private BlogComment associatedBlogComment;
 
   @Column(name = "reply_publish_date", nullable = false)

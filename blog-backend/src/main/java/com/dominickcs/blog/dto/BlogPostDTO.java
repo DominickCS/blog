@@ -20,4 +20,5 @@ public class BlogPostDTO {
   private int blogSaveCount;
   private LocalDateTime blogPublishDate;
   private LocalDateTime blogModifyDate;
+  private String searchQuery;
 }

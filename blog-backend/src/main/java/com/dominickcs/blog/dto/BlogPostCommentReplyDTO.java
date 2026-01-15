@@ -8,7 +8,7 @@ import com.dominickcs.blog.entity.BlogComment;
 import lombok.Data;
 
 @Data
-public class BlogCommentReplyDTO {
+public class BlogPostCommentReplyDTO {
   private UUID id;
   private String replyBody;
   private int replyLikeCount;

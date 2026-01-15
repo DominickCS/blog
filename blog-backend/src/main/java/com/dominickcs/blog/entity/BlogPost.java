@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 @Entity
@@ -35,7 +38,9 @@ public class BlogPost {
   @Column(name = "blog_post_tags", nullable = false)
   private List<String> blogTags;
 
-  @OneToMany(mappedBy = "associatedBlogPost", cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "associatedBlogPost")
+  @JsonIgnoreProperties({ "associatedBlogPost", "hibernateLazyInitializer", "handler" })
+  @ToString.Exclude
   private List<BlogComment> blogComments;
 
   @Column(name = "blog_post_likes")
