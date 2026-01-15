@@ -4,31 +4,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "blog_posts")
 public class BlogPost {
+
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id", nullable = false)
   private UUID id;
 
   @Column(name = "blog_publish_date", nullable = false)
   private LocalDateTime blogPublishDate;
 
-  @Column(name = "blog_modify_date", nullable = true)
-  private LocalDateTime blogModifyDate = null;
+  @Column(name = "blog_modify_date")
+  private LocalDateTime blogModifyDate;
 
-  // Look Up Base64 Conversion
-  @Column(name = "blog_post_header_url", nullable = true)
+  @Column(name = "blog_post_header_url")
   private String blogHeaderURL;
 
   @Column(name = "blog_post_title", nullable = false)
@@ -40,15 +35,12 @@ public class BlogPost {
   @Column(name = "blog_post_tags", nullable = false)
   private List<String> blogTags;
 
-  @Column(name = "blog_post_comments", nullable = true)
+  @OneToMany(mappedBy = "associatedBlogPost", cascade = CascadeType.ALL)
   private List<BlogComment> blogComments;
 
-  @Column(name = "blog_post_likes", nullable = true)
+  @Column(name = "blog_post_likes")
   private int blogLikeCount = 0;
 
-  @Column(name = "blog_post_saves", nullable = true)
+  @Column(name = "blog_post_saves")
   private int blogSaveCount = 0;
-
-  // Author => User Entity
-
 }

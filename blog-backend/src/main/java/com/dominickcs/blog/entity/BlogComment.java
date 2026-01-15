@@ -4,47 +4,35 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "blog_comments")
 public class BlogComment {
+
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  @Column(name = "associated_blog_post", nullable = false)
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "blog_post_id", nullable = true)
   private BlogPost associatedBlogPost;
 
   @Column(name = "comment_body", nullable = false)
   private String commentBody;
 
-  @Column(name = "comment_like_count", nullable = true)
-  private int commentLikeCount;
+  @Column(name = "comment_like_count")
+  private int commentLikeCount = 0;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @Column(name = "comment_replies", nullable = true)
-  private List<BlogCommentReply> commentReplies;
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "associatedBlogComment")
+  private List<BlogCommentReply> commentReplies = null;
 
   @Column(name = "comment_publish_date", nullable = false)
   private LocalDateTime commentPublishDate;
 
-  @Column(name = "comment_modify_date", nullable = true)
+  @Column(name = "comment_modify_date")
   private LocalDateTime commentModifyDate = null;
-
-  // ONE TO ONE USER RELATIONSHIP
-
 }

@@ -54,11 +54,18 @@ export default function HomePage() {
           <p>{blogPosts[0].blogBody}</p>
           <div className="my-8">
             <h2 className="text-xl font-extrabold">Comments</h2>
-            <ul>
-              {blogPosts[0].blogComments.map(comment => {
-                return <li key={blogPosts[0].id}>{comment}</li>
-              })}
-            </ul>
+            {blogPosts[0].blogComments.length > 0 ?
+              <ul>
+                {blogPosts[0].blogComments.map(comment => {
+                  return <li key={blogPosts[0].id}>{comment}</li>
+                })}
+              </ul>
+              :
+              <div className="my-8">
+                <p>No comments yet...</p>
+                <p>Be the first, and start a conversation!</p>
+              </div>
+            }
           </div>
         </div>
       </div>

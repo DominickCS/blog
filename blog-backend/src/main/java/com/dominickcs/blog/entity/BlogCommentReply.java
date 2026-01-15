@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -25,9 +26,9 @@ public class BlogCommentReply {
   private String replyBody;
 
   @Column(name = "reply_like_count")
-  private int replyLikeCount;
+  private int replyLikeCount = 0;
 
-  @Column(name = "associated_blog_post", nullable = false)
+  @JoinColumn(name = "comment_replies", nullable = true)
   @ManyToOne(fetch = FetchType.LAZY)
   private BlogComment associatedBlogComment;
 
