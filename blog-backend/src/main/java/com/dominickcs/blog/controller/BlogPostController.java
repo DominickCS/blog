@@ -38,7 +38,7 @@ public class BlogPostController {
 
   @GetMapping("/all-posts")
   public List<BlogPost> getAllBlogPosts() {
-    return blogPostRepository.findAll();
+    return blogPostRepository.findByOrderByBlogPublishDateDesc();
   }
 
   @PostMapping("/search")

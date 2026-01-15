@@ -36,7 +36,7 @@ public class BlogPostService {
       blogPost.setBlogTitle(blogPostDTO.getBlogTitle());
       blogPost.setBlogPublishDate(currentDate);
       blogPostRepository.save(blogPost);
-      return ("Blog post creation successful! " + blogPost.toString());
+      return ("Blog post creation successful! ");
     } catch (Exception e) {
       return ("An error occurred during blog post creation: " + e.toString());
     }

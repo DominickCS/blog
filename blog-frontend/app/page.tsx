@@ -1,11 +1,15 @@
 'use client'
 
+import HeartSVG from "@/public/heart.svg"
+import SaveSVG from "@/public/save.svg"
 import { useEffect, useState } from "react"
+import NavigationBar from "@/app/_components/ui/navbar";
+import Image from "next/image";
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [blogPosts, setBlogPosts] = useState([])
-  const [blogPostComments, setBlogPostComments] = useState([])
+  const blogPreview = 100;
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
@@ -16,6 +20,7 @@ export default function HomePage() {
             'Authorization': "Authorization: Basic dXNlcjpEb21UaGVEZXYwOTIxMDBA"
           },
         }))
+
         setBlogPosts(await response.json())
       } catch (error) {
       } finally {
@@ -26,50 +31,50 @@ export default function HomePage() {
   }, []);
 
 
-  if (loading) {
-    return (
-      <>
-        LOADING
-      </>
-    )
-  }
-  else if (blogPosts.length > 0) {
+  if (!loading && blogPosts.length > 0) {
     console.log(blogPosts)
 
-    const date = new Date(blogPosts[0].blogPublishDate).toLocaleDateString()
     return (
-      <div className="max-w-sm mx-auto leading-8">
-        <div className="my-8">
-          <h1 className="text-3xl my-4 font-extrabold">{blogPosts[0].blogTitle}</h1>
-          <p>{date}</p>
-          <div className="flex">
-            TAGS :
-            {blogPosts[0].blogTags.map((tag: string) => {
-              return <p className="mx-2" key={tag}>{tag}</p>
-            })}
-          </div>
-          <div className="flex">
-            <p className="mx-4">Likes: {blogPosts[0].blogLikeCount}</p>
-            <p className="mx-4">Saves: {blogPosts[0].blogSaveCount}</p>
-          </div>
-        </div>
-        <div>
-          <p>{blogPosts[0].blogBody}</p>
-          <div className="my-8">
-            <h2 className="text-xl font-extrabold">Comments</h2>
-            {blogPosts[0].blogComments.length > 0 ?
-              <ul>
-                {blogPosts[0].blogComments.map(comment => {
-                  return <li key={blogPosts[0].blogComments.commentId}>{comment.commentBody}</li>
-                })}
-              </ul>
-              :
-              <div className="my-8">
-                <p>No comments yet...</p>
-                <p>Be the first, and start a conversation!</p>
+      <div>
+        <NavigationBar />
+        <div className="max-w-lg mx-auto">
+          {blogPosts.map((blogPost) => {
+            const date = new Date(blogPost.blogPublishDate).toLocaleDateString() + " at " + new Date(blogPost.blogPublishDate).toLocaleTimeString()
+
+            return (
+              <div key={blogPost.id} className="border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60 bg-white rounded-xl p-8 my-12">
+                <div>
+                  <h1 className="text-3xl my-2 font-semibold">{blogPost.blogTitle}</h1>
+                  <p className="font-extralight mb-2 text-sm">Published on {date}</p>
+                  <div className="flex mb-8 font-light text-red-500/80">
+                    {blogPost.blogTags.map((tag: string) => {
+                      return <p className="mr-2 text-xs font-mono" key={tag}>{tag}</p>
+                    })}
+                  </div>
+                </div>
+                <div className="font-mono font-light text-md">
+                  {blogPost.blogBody.length > blogPreview ?
+                    <p>{blogPost.blogBody.substring(0, blogPreview) + '...'}</p>
+                    :
+                    <p>{blogPost.blogBody}</p>
+                  }
+                  <div className="mt-12 flex justify-center-safe text-center">
+                    <p className="mx-4"><Image src={HeartSVG} width={20}></Image> {blogPost.blogLikeCount}</p>
+                    <p className="mx-4"><Image src={SaveSVG} width={20}></Image>{blogPost.blogSaveCount}</p>
+                  </div>
+                </div>
               </div>
-            }
-          </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <NavigationBar />
+        <div className="text-center text-4xl">
+          <p>Fetching articles...</p>
         </div>
       </div>
     )
