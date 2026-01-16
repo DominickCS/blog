@@ -42,10 +42,10 @@ export default function BlogPost() {
     return (
       <div>
         <NavigationBar />
-        <div className="bg-white rounded-md max-w-xl mx-auto p-8 my-8 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60">
+        <div className="bg-white rounded-md max-w-md md:max-w-2xl mx-auto p-8 my-8 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60">
           <h1 className="text-center text-3xl font-medium mb-4">{blogPost.blogTitle}</h1>
           <hr className="my-6 max-w-xs mx-auto" />
-          <div className="flex text-sm font-light items-center mt-2 justify-evenly">
+          <div className="flex text-xs md:text-sm font-light items-center mt-2 justify-evenly">
             {blogPost.blogTags.map((tag, id) => {
               return <p className="" key={id}>{tag}</p>
             })}
@@ -55,10 +55,32 @@ export default function BlogPost() {
             <p className="">{blogPost.blogBody}</p>
             <hr className="my-6 max-w-xs mx-auto" />
           </div>
-          <div>
-            <h2 className="text-xl font-medium">Comments</h2>
+          <div className="mb-24">
+            <h2 className="text-xl font-medium underline-offset-10 underline">Comments</h2>
+            {blogPost.blogComments.length > 0 ?
+              <div className="my-6">
+                {blogPost.blogComments.map((comment, id) => {
+                  return (
+                    <div className="my-6 flex content-center justify-between">
+                      <div>
+                        <p key={id} className="mb-2 text-sm font-normal">{comment.commentBody}</p>
+                        <p key={comment.commentPublishDate} className="font-light text-xs">{new Date(comment.commentPublishDate).toLocaleDateString()}</p>
+                      </div>
+                      <div className="flex justify-end text-center">
+                        <p className="mx-4"><Image src={HeartSVG} width={20}></Image> {blogPost.blogLikeCount}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              :
+              <div className="my-6">
+                <p>No comments yet... Start a conversation!</p>
+              </div>
+            }
           </div>
-          <div className="mt-8 flex justify-end text-center">
+          <h2 className="text-center font-light underline-offset-16 underline">Support This Post</h2>
+          <div className="mt-8 flex justify-center text-center">
             <p className="mx-4"><Image src={HeartSVG} width={20}></Image> {blogPost.blogLikeCount}</p>
             <p className="mx-4"><Image src={SaveSVG} width={20}></Image>{blogPost.blogSaveCount}</p>
           </div>
