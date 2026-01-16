@@ -72,12 +72,21 @@ export default function HomePage() {
         </div>
       </div>
     )
-  } else {
+  } else if (!loading && blogPosts.length <= 0) {
     return (
       <div>
         <NavigationBar />
-        <div className="text-center text-4xl">
-          <p>Fetching articles...</p>
+        <div className="text-center text-2xl mt-12">
+          <p>No blog posts yet...</p>
+        </div>
+      </div>
+    )
+  } else if (loading) {
+    return (
+      <div>
+        <NavigationBar />
+        <div className="text-center text-2xl mt-12">
+          <p>Loading blog posts...</p>
         </div>
       </div>
     )
