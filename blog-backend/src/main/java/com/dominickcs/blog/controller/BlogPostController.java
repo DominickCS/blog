@@ -5,12 +5,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dominickcs.blog.dto.BlogPostCommentDTO;
+import com.dominickcs.blog.dto.BlogPostCommentReplyDTO;
 import com.dominickcs.blog.dto.BlogPostDTO;
 import com.dominickcs.blog.entity.BlogPost;
+import com.dominickcs.blog.entity.User;
 import com.dominickcs.blog.repository.BlogPostRepository;
 import com.dominickcs.blog.service.BlogPostService;
 
@@ -27,27 +30,35 @@ public class BlogPostController {
   @Autowired
   BlogPostService blogPostService;
 
-  @PostMapping("/new-post")
-  public String addNewBlogPost(@RequestBody BlogPostDTO blogPostDTO) throws Exception {
-    return blogPostService.addBlogPost(blogPostDTO);
+  @PostMapping("/new/post")
+  public String addNewBlogPost(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user)
+      throws Exception {
+    return blogPostService.addBlogPost(blogPostDTO, user);
   }
 
-  @PostMapping("/new-comment")
-  public String addNewBlogComment(@RequestBody BlogPostCommentDTO blogPostCommentDTO) throws Exception {
-    return blogPostService.addComment(blogPostCommentDTO);
+  @PostMapping("/new/comment")
+  public String addNewBlogComment(@RequestBody BlogPostCommentDTO blogPostCommentDTO,
+      @AuthenticationPrincipal User user) throws Exception {
+    return blogPostService.addComment(blogPostCommentDTO, user);
   }
 
-  @GetMapping("/all-posts")
+  @PostMapping("/new/reply")
+  public String addNewCommentReply(@RequestBody BlogPostCommentReplyDTO blogPostCommentReplyDTO,
+      @AuthenticationPrincipal User user) throws Exception {
+    return blogPostService.addReply(blogPostCommentReplyDTO, user);
+  }
+
+  @GetMapping("/posts/all")
   public List<BlogPost> getAllBlogPosts() {
     return blogPostRepository.findByOrderByBlogPublishDateDesc();
   }
 
-  @PostMapping("/fetch-post")
+  @PostMapping("/posts/single")
   public Optional<BlogPost> getBlogPost(@RequestBody BlogPostDTO blogPostDTO) throws Exception {
     return blogPostRepository.findById(blogPostDTO.getId());
   }
 
-  @PostMapping("/search")
+  @PostMapping("/posts/search")
   public List<BlogPost> findBlogPost(@RequestBody BlogPostDTO blogPostDTO) {
     String searchQuery = blogPostDTO.getSearchQuery();
     return blogPostRepository.findByOrderByBlogPublishDateDesc().stream()

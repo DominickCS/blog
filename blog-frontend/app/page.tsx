@@ -14,7 +14,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
-        const response = await (fetch("http://localhost:8080/all-posts", {
+        const response = await (fetch("http://localhost:8080/posts/all", {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',

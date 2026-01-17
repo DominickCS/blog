@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.dominickcs.blog.entity.BlogComment;
+import com.dominickcs.blog.entity.BlogPost;
+import com.dominickcs.blog.entity.User;
 
 import lombok.Data;
 
@@ -20,5 +22,8 @@ public class BlogPostDTO {
   private int blogSaveCount;
   private LocalDateTime blogPublishDate;
   private LocalDateTime blogModifyDate;
+  private User blogAuthor;
+  private List<BlogPost> savedPosts;
+  private List<BlogPost> likedPosts;
   private String searchQuery;
 }

@@ -35,7 +35,9 @@ public class BlogPost {
   @Column(name = "blog_post_body", nullable = false, length = 65535)
   private String blogBody;
 
-  @Column(name = "blog_post_tags", nullable = false)
+  @ElementCollection
+  @CollectionTable(name = "blog_post_tags", joinColumns = @JoinColumn(name = "blog_post_id"))
+  @Column(name = "tag")
   private List<String> blogTags;
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "associatedBlogPost")
@@ -48,4 +50,8 @@ public class BlogPost {
 
   @Column(name = "blog_post_saves")
   private int blogSaveCount = 0;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "blog_post_author_id")
+  private User blogPostAuthor;
 }

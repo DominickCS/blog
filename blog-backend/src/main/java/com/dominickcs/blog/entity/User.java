@@ -29,12 +29,22 @@ public class User implements UserDetails {
   @Column(unique = true)
   private String email;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String role = "ROLE_USER";
   private boolean enabled = true;
   private boolean accountNonExpired = true;
   private boolean accountNonLocked = true;
   private boolean credentialsNonExpired = true;
+
+  @ManyToMany
+  @JoinTable(name = "user_saved_posts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "blog_post_id"))
+  private List<BlogPost> savedPosts;
+
+  @ManyToMany
+  @JoinTable(name = "user_liked_posts", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "blog_post_id"))
+  private List<BlogPost> likedPosts;
+
+  // Method Overrrides
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

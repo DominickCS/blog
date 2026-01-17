@@ -3,7 +3,7 @@ package com.dominickcs.blog.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import com.dominickcs.blog.entity.BlogComment;
+import com.dominickcs.blog.entity.User;
 
 import lombok.Data;
 
@@ -12,7 +12,8 @@ public class BlogPostCommentReplyDTO {
   private UUID id;
   private String replyBody;
   private int replyLikeCount;
-  private BlogComment associatedBlogComment;
+  private UUID associatedBlogComment;
   private LocalDateTime replyPublishDate;
   private LocalDateTime replyModifyDate;
+  private User replyAuthor;
 }

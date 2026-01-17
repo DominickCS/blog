@@ -42,4 +42,8 @@ public class BlogCommentReply {
 
   @Column(name = "reply_modify_date", nullable = true)
   private LocalDateTime replyModifyDate = null;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "reply_author_id")
+  private User replyAuthor;
 }

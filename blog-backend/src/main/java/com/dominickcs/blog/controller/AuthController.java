@@ -52,11 +52,6 @@ public class AuthController {
     User newUser = new User();
     newUser.setUsername(request.getUsername());
     newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-    if (request.getRole() == null) {
-      newUser.setRole("ROLE_USER");
-    } else {
-      newUser.setRole(request.getRole());
-    }
 
     userService.save(newUser);
     String token = jwtUtil.generateToken(request.getUsername());

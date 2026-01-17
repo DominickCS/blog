@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.dominickcs.blog.entity.BlogCommentReply;
+import com.dominickcs.blog.entity.User;
 
 import lombok.Data;
 
@@ -17,4 +18,5 @@ public class BlogPostCommentDTO {
   private List<BlogCommentReply> commentReplies;
   private LocalDateTime commentPublishDate;
   private LocalDateTime commentModifyDate;
+  private User commentAuthor;
 }

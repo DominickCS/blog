@@ -1,12 +1,13 @@
 package com.dominickcs.blog.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.dominickcs.blog.entity.User;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
   Optional<User> findByUsername(String username);
 
   boolean existsByUsername(String username);
