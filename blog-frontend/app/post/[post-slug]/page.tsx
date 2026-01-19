@@ -59,7 +59,7 @@ export default function BlogPost() {
             <p className="">{date}</p>
           </div>
           <div className="my-10">
-            <p className="">{blogPost.blogBody}</p>
+            <p className="whitespace-pre-wrap">{blogPost.blogBody}</p>
             <hr className="my-6 max-w-xs mx-auto" />
           </div>
           <div className="mb-24">
