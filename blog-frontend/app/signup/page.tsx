@@ -83,6 +83,7 @@ export default function LoginPage() {
       <NavigationBar />
       <div className="mt-8">
         <form className="flex flex-col max-w-sm mx-auto" onSubmit={HandleSubmit}>
+          <label htmlFor="email">Email Address</label>
           <label htmlFor="username">Username</label>
           <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="bg-white" />
           {errors.username && <p className="text-red-500/60 font-light">{errors.username}</p>}
