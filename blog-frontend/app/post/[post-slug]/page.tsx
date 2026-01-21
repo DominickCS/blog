@@ -133,8 +133,13 @@ export default function BlogPost() {
                           </div>
                         </div>
                       </div>
+                      <div className="mt-4">
+                        <form className=" flex content-center items-center ">
+                          <textarea placeholder="Add a comment ..." />
+                          <input type="submit" value={"Add Comment"} className="text-xs max-w-3xs ml-4 border border-black tracking-tighter p-2" />
+                        </form>
+                      </div>
 
-                      {/* Replies section */}
                       {comment.commentReplies && comment.commentReplies.length > 0 && (
                         <div className="ml-8">
                           {comment.commentReplies.map((reply) => (
@@ -152,7 +157,15 @@ export default function BlogPost() {
             ) : (
               <div className="my-6">
                 <p>No comments yet... Start a conversation!</p>
+                <div className="mt-4">
+                  <form className=" flex content-center items-center ">
+                    <textarea placeholder="Add a comment ..." />
+                    <input type="submit" value={"Add Comment"} className="text-xs max-w-3xs ml-4 border border-black tracking-tighter p-2" />
+                  </form>
+                </div>
+
               </div>
+
             )}
           </div>
           <h2 className="text-center font-light underline-offset-16 underline">Support This Post</h2>
