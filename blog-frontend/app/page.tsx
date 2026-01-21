@@ -8,9 +8,21 @@ import Image from "next/image";
 import Link from "next/link";
 import FetchBlogPosts from "./_serverActions/(blogFunctions)/fetchBlogPosts";
 import { toast } from "react-toastify";
+import SearchBlogPost from "./_serverActions/(blogFunctions)/searchBlogPosts";
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
+  const [formData, setFormData] = useState({
+    searchBox: ""
+  })
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
   const [blogPosts, setBlogPosts] = useState([
     {
       id: "",
@@ -23,13 +35,14 @@ export default function HomePage() {
     }
   ])
   const blogPreview = 100;
+
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
         const response = await FetchBlogPosts()
         setBlogPosts(response.data)
-        toast.info(`${await response.message}`)
       } catch (error) {
+        console.log(error)
       } finally {
         setLoading(false)
       }
@@ -37,15 +50,25 @@ export default function HomePage() {
     fetchBlogPosts();
   }, []);
 
+  async function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    try {
+      const response = await SearchBlogPost(formData.searchBox)
+      setBlogPosts(response)
+    } catch (error) {
+      toast.error(`${error}`)
+    }
+  }
+
   if (!loading && blogPosts.length > 0) {
     return (
       <div>
         <NavigationBar />
         <div className="max-w-lg mx-auto">
-          <div>
-            <form >
-              <label htmlFor="searchBox">Search Blog Posts</label>
-              <input type="text" name="searchBox" id="searchBox" className="bg-white" />
+          <div className="mx-auto max-w-sm mt-8">
+            <form onSubmit={handleSearch}>
+              <label className="mx-2" htmlFor="searchBox">Search Blog Posts</label>
+              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="bg-white mx-2" />
             </form>
           </div>
           {blogPosts.map((blogPost) => {
@@ -85,8 +108,14 @@ export default function HomePage() {
     return (
       <div>
         <NavigationBar />
-        <div className="text-center text-2xl mt-12">
-          <p>No blog posts yet...</p>
+        <div className="text-center max-w-lg mx-auto">
+          <div className="mt-8 max-w-sm mx-auto">
+            <form onSubmit={handleSearch}>
+              <label className="mx-2" htmlFor="searchBox">Search Blog Posts</label>
+              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="bg-white mx-2" />
+            </form>
+          </div>
+          <p>No results found for search query {formData.searchBox}</p>
         </div>
       </div>
     )
@@ -95,6 +124,12 @@ export default function HomePage() {
       <div>
         <NavigationBar />
         <div className="text-center text-2xl mt-12">
+          <div className="mt-8 max-w-sm mx-auto">
+            <form onSubmit={handleSearch}>
+              <label className="mx-2" htmlFor="searchBox">Search Blog Posts</label>
+              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="bg-white mx-2" />
+            </form>
+          </div>
           <p>Loading blog posts...</p>
         </div>
       </div>

@@ -26,15 +26,11 @@ export default function UserProfilePage() {
     return (
       <div>
         <NavigationBar />
-        {/* {userDetails.likedPosts.map((post) => { */}
-        <>
-          <p>post placeholder</p>
-        </>
-        {/* })} */}
         <div>
-
+          {/* {userDetails.likedPosts.map((post) => { */}
+          {/*   <p></p> */}
+          {/* })} */}
         </div>
-        hey world
       </div>
     )
   }
