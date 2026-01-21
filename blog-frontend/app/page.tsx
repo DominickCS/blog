@@ -123,13 +123,7 @@ export default function HomePage() {
     return (
       <div>
         <NavigationBar />
-        <div className="text-center text-2xl mt-12">
-          <div className="mt-8 max-w-sm mx-auto">
-            <form onSubmit={handleSearch}>
-              <label className="mx-2" htmlFor="searchBox">Search Blog Posts</label>
-              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="bg-white mx-2" />
-            </form>
-          </div>
+        <div className="text-center text-xl mt-12">
           <p>Loading blog posts...</p>
         </div>
       </div>
