@@ -10,7 +10,7 @@ export default async function FetchUserDetails() {
         'Content-Type': 'application/json',
       },
     })
-    return response.json()
+    return response.data.json()
   } catch (error) {
     console.log(error)
   }

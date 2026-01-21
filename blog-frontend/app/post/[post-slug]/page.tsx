@@ -1,6 +1,6 @@
 'use client'
 import NavigationBar from "@/app/_components/ui/navbar"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import FetchUserDetails from "@/app/_serverActions/(auth)/fetchUserDetails"
@@ -11,6 +11,7 @@ import BlogPostLikeHandler from "@/app/_serverActions/(blogFunctions)/blogPostLi
 
 
 export default function BlogPost() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true)
   const [blogPost, setBlogPost] = useState({
     blogTitle: "",
@@ -40,7 +41,7 @@ export default function BlogPost() {
         const response = await FetchUserDetails()
         setUserLikeList(await response.likedPosts)
       } catch (error) {
-        toast.error(`${error}`)
+        console.log(error)
       } finally {
         setLoading(false)
       }
@@ -53,7 +54,6 @@ export default function BlogPost() {
       try {
         const response = await FetchSinglePost(blogPostID)
         setBlogPost(response.data)
-
       } catch (error) {
         toast.error(`Error fetching blog post: ${error}`)
       } finally {
@@ -76,6 +76,7 @@ export default function BlogPost() {
     }
     else {
       toast.error(`${response.message}`)
+      router.push('/login')
     }
     setUpdate(prev => !prev)
   }

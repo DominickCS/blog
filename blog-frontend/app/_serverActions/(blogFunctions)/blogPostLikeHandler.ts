@@ -10,8 +10,15 @@ export default async function BlogPostLikeHandler(blogPostID: string) {
         "id": blogPostID
       })
     })
-    return { isError: false, data: response.json(), message: "BlogPostLikeHandler function completed sucessfully!" }
+
+    if (response.unauthorized) {
+      return {
+        isError: true, message: "You must be signed in to perform this action."
+      }
+    }
+
+    return { isError: false, message: "BlogPostLikeHandler function completed sucessfully!" }
   } catch (error) {
-    return { isError: true, data: null, message: error }
+    return { isError: true, message: error }
   }
 }

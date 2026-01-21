@@ -1,7 +1,6 @@
 'use server'
 
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
 export async function authenticatedRequest(url, options = {}) {
   const cookieStore = await cookies();
@@ -24,8 +23,8 @@ export async function authenticatedRequest(url, options = {}) {
   // Token Expiration Logic
   if (response.status === 401) {
     cookieStore.delete('token');
-    redirect('/login');
+    return { unauthorized: true, data: response }
   }
 
-  return await response;
+  return { unauthorized: false, data: response };
 }

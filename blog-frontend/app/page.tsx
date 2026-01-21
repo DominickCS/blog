@@ -42,6 +42,12 @@ export default function HomePage() {
       <div>
         <NavigationBar />
         <div className="max-w-lg mx-auto">
+          <div>
+            <form >
+              <label htmlFor="searchBox">Search Blog Posts</label>
+              <input type="text" name="searchBox" id="searchBox" className="bg-white" />
+            </form>
+          </div>
           {blogPosts.map((blogPost) => {
             const date = new Date(blogPost.blogPublishDate).toLocaleDateString() + " at " + new Date(blogPost.blogPublishDate).toLocaleTimeString()
 
