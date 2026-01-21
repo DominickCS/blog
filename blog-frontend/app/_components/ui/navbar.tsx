@@ -1,5 +1,5 @@
 'use client'
-
+import { useState, useEffect } from "react";
 import Logout from "@/app/_serverActions/(auth)/logout";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,9 +8,16 @@ import { useRouter } from "next/navigation";
 
 export default function NavigationBar() {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setIsLoggedIn(document.cookie.search("token") !== -1);
+  }, []);
+
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     const value = event.currentTarget.value;
-
     switch (value) {
       case 'login':
         router.push('/login');
@@ -24,13 +31,24 @@ export default function NavigationBar() {
     }
   }
 
+  // Don't render auth buttons until mounted to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="mt-4 flex content-center items-center justify-evenly max-w-lg md:max-w-xl mx-auto">
+        <div>
+          <Link href={'/'} className="hover:text-purple-800 duration-600 hover:tracking-wide text-xl font-mono text-purple-300 tracking-tighter">Developing with DominickCS_</Link>
+        </div>
+        <div className="flex w-32"></div> {/* Placeholder to prevent layout shift */}
+      </div>
+    );
+  }
+
   return (
     <div className="mt-4 flex content-center items-center justify-evenly max-w-lg md:max-w-xl mx-auto">
       <div>
         <Link href={'/'} className="hover:text-purple-800 duration-600 hover:tracking-wide text-xl font-mono text-purple-300 tracking-tighter">Developing with DominickCS_</Link>
       </div>
-
-      {document.cookie.search("token") == -1 ?
+      {!isLoggedIn ?
         <div className="flex">
           <button onClick={handleClick} className="mx-4 hover:scale-140 duration-700 hover:cursor-pointer text-xs" value={'login'}>Login</button>
           <button onClick={handleClick} className="mx-4 hover:scale-140 duration-700 hover:cursor-pointer text-xs" value={'signup'}>Sign Up</button>

@@ -27,5 +27,5 @@ export async function authenticatedRequest(url, options = {}) {
     redirect('/login');
   }
 
-  return response;
+  return await response;
 }

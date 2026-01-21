@@ -6,23 +6,29 @@ import { useEffect, useState } from "react"
 import NavigationBar from "@/app/_components/ui/navbar";
 import Image from "next/image";
 import Link from "next/link";
+import FetchBlogPosts from "./_serverActions/(blogFunctions)/fetchBlogPosts";
+import { toast } from "react-toastify";
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
-  const [blogPosts, setBlogPosts] = useState([])
+  const [blogPosts, setBlogPosts] = useState([
+    {
+      id: "",
+      blogPublishDate: "",
+      blogTitle: "",
+      blogTags: [],
+      blogBody: "",
+      blogLikeCount: 0,
+      blogSaveCount: 0
+    }
+  ])
   const blogPreview = 100;
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
-        const response = await (fetch("http://localhost:8080/posts/all", {
-          method: "GET",
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': "Authorization: Basic dXNlcjpEb21UaGVEZXYwOTIxMDBA"
-          },
-        }))
-
-        setBlogPosts(await response.json())
+        const response = await FetchBlogPosts()
+        setBlogPosts(response.data)
+        toast.info(`${await response.message}`)
       } catch (error) {
       } finally {
         setLoading(false)
@@ -31,10 +37,7 @@ export default function HomePage() {
     fetchBlogPosts();
   }, []);
 
-
   if (!loading && blogPosts.length > 0) {
-    console.log(blogPosts)
-
     return (
       <div>
         <NavigationBar />
@@ -43,14 +46,14 @@ export default function HomePage() {
             const date = new Date(blogPost.blogPublishDate).toLocaleDateString() + " at " + new Date(blogPost.blogPublishDate).toLocaleTimeString()
 
             return (
-              <Link href={`/post/${blogPost.id}`}>
-                <div key={blogPost.id} className="border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60 bg-white rounded-xl p-8 my-12">
+              <Link key={blogPost.id} href={`/post/${blogPost.id}`}>
+                <div key={blogPost.id} className="hover:rotate-4 hover:scale-110 duration-700 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60 bg-white rounded-xl p-8 my-12">
                   <div>
                     <h1 className="text-3xl my-2 font-semibold">{blogPost.blogTitle}</h1>
                     <p className="font-extralight mb-2 text-sm">Published on {date}</p>
                     <div className="flex mb-8 font-light text-red-500/80">
-                      {blogPost.blogTags.map((tag: string) => {
-                        return <p className="mr-2 text-xs font-mono" key={tag}>{tag}</p>
+                      {blogPost.blogTags.map((tag: string, id: number) => {
+                        return <p className="mr-2 text-xs font-mono" key={id}>{tag}</p>
                       })}
                     </div>
                   </div>
@@ -61,8 +64,8 @@ export default function HomePage() {
                       <p>{blogPost.blogBody}</p>
                     }
                     <div className="mt-12 flex justify-center-safe text-center">
-                      <p className="mx-4"><Image src={HeartSVG} width={20}></Image> {blogPost.blogLikeCount}</p>
-                      <p className="mx-4"><Image src={SaveSVG} width={20}></Image>{blogPost.blogSaveCount}</p>
+                      <p className="mx-4"><Image alt="A heart icon to signify likes on this blog post." src={HeartSVG} width={20}></Image> {blogPost.blogLikeCount}</p>
+                      <p className="mx-4"><Image alt="A bookmark icon to signify the number of bookmarks on this blog post." src={SaveSVG} width={20}></Image>{blogPost.blogSaveCount}</p>
                     </div>
                   </div>
                 </div>

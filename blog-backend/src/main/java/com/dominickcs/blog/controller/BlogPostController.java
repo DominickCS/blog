@@ -15,6 +15,7 @@ import com.dominickcs.blog.dto.BlogPostDTO;
 import com.dominickcs.blog.entity.BlogPost;
 import com.dominickcs.blog.entity.User;
 import com.dominickcs.blog.repository.BlogPostRepository;
+import com.dominickcs.blog.repository.UserRepository;
 import com.dominickcs.blog.service.BlogPostService;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,9 @@ public class BlogPostController {
 
   @Autowired
   BlogPostService blogPostService;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @PostMapping("/new/post")
   public String addNewBlogPost(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user)
@@ -64,6 +68,17 @@ public class BlogPostController {
     return blogPostRepository.findByOrderByBlogPublishDateDesc().stream()
         .filter(result -> result.getBlogTitle().toLowerCase().contains(searchQuery.toLowerCase()))
         .collect(Collectors.toList());
+  }
+
+  @GetMapping("/users/currentuser")
+  public Optional<User> getCurrentUser(@AuthenticationPrincipal User user) {
+    return userRepository.findByUsername(user.getUsername());
+  }
+
+  @PostMapping("/like")
+  public String addBlogPostLike(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user)
+      throws Exception {
+    return blogPostService.blogLikeHandler(blogPostDTO, user);
   }
 
 }

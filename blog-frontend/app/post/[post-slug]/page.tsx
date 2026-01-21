@@ -2,42 +2,83 @@
 import NavigationBar from "@/app/_components/ui/navbar"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import HeartSVG from "@/public/heart.svg"
-import SaveSVG from "@/public/save.svg"
 import Image from "next/image"
+import FetchUserDetails from "@/app/_serverActions/(auth)/fetchUserDetails"
+import { toast } from "react-toastify"
+import { Icon } from "@iconify/react";
+import FetchSinglePost from "@/app/_serverActions/(blogFunctions)/fetchSinglePost"
+import BlogPostLikeHandler from "@/app/_serverActions/(blogFunctions)/blogPostLikeHandler"
 
 
 export default function BlogPost() {
   const [loading, setLoading] = useState(true)
-  const [blogPost, setBlogPost] = useState({})
+  const [blogPost, setBlogPost] = useState({
+    blogTitle: "",
+    blogPublishDate: "",
+    blogBody: "",
+    blogPostAuthor: {
+      username: ""
+    },
+    blogTags: [],
+    blogComments: [{
+      id: "",
+      commentAuthor: {
+        "username": ""
+      },
+      commentPublishDate: "",
+
+    }]
+
+  })
+  const [userLikeList, setUserLikeList] = useState([])
+  const [update, setUpdate] = useState(true)
   const blogPostID = usePathname().split('/')[2]
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await FetchUserDetails()
+        setUserLikeList(await response.likedPosts)
+      } catch (error) {
+        toast.error(`${error}`)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchUser()
+  }, [update]);
 
   useEffect(() => {
     const fetchBlogPost = async () => {
       try {
-        const response = await fetch("http://localhost:8080/posts/single", {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': "Authorization: Basic dXNlcjpEb21UaGVEZXYwOTIxMDBA"
-          },
-          body: JSON.stringify({
-            "id": blogPostID
-          })
-        })
+        const response = await FetchSinglePost(blogPostID)
+        setBlogPost(response.data)
 
-        setBlogPost(await response.json())
       } catch (error) {
-        console.error("Error fetching blog post:", error)
+        toast.error(`Error fetching blog post: ${error}`)
       } finally {
         setLoading(false)
       }
     };
+
     fetchBlogPost();
-  }, [blogPostID]);
+  }, [update]);
 
 
-  console.log(blogPost)
+  async function likeHandler() {
+    const response = await BlogPostLikeHandler(blogPostID)
+    if (!response.isError) {
+      if (!userLikeList.includes(`${blogPostID}`)) {
+        toast.success("Post added to your likes!")
+      } else {
+        toast.success("Post removed from your likes!")
+      }
+    }
+    else {
+      toast.error(`${response.message}`)
+    }
+    setUpdate(prev => !prev)
+  }
 
   if (!loading && blogPost && blogPost.blogTitle) {
     const date = new Date(blogPost.blogPublishDate).toLocaleDateString() + " at " + new Date(blogPost.blogPublishDate).toLocaleTimeString()
@@ -115,11 +156,11 @@ export default function BlogPost() {
           </div>
           <h2 className="text-center font-light underline-offset-16 underline">Support This Post</h2>
           <div className="mt-8 flex justify-center text-center">
-            <p className="mx-4"><Image src={HeartSVG} width={16} alt="Heart"></Image> {blogPost.blogLikeCount}</p>
-            <p className="mx-4"><Image src={SaveSVG} width={16} alt="Save"></Image> {blogPost.blogSaveCount}</p>
+            <p className="mx-4"><Icon onClick={likeHandler} className={userLikeList.includes(`${blogPostID}`) ? "invert" : ""} icon="material-symbols:favorite"></Icon>{blogPost.blogLikeCount}</p>
+            <p className="mx-4"><Icon icon="material-symbols:bookmark"></Icon> {blogPost.blogSaveCount}</p>
           </div>
         </div>
-      </div>
+      </div >
     )
   } else {
     return (

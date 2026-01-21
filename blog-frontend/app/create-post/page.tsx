@@ -1,8 +1,8 @@
 'use client'
 import { useState } from "react";
-import createNewPost from "../_serverActions/blogFunctions/createNewPost";
-import NavigationBar from "../_components/ui/navbar";
-
+import createNewPost from "@/app/_serverActions/(blogFunctions)/createNewPost";
+import NavigationBar from "@/app/_components/ui/navbar";
+import { toast } from "react-toastify";
 
 export default function CreatePostPage() {
   const [tags, setTags] = useState<string[]>([])
@@ -59,7 +59,6 @@ export default function CreatePostPage() {
       setTags(prev => [...prev, tagWithHash])
       setTagInput("")
 
-      // Clear tag error if exists
       if (errors.tags) {
         setErrors(prev => ({ ...prev, tags: '' }));
       }
@@ -77,14 +76,18 @@ export default function CreatePostPage() {
 
     try {
       const response = await createNewPost(formData.title, formData.body, tags)
-      console.log('Post created successfully:', response)
+      if (!response.isError) {
+        toast.success(`${response.message}`)
+      }
+      else {
+        toast.error(`${response.message}`)
+      }
 
-      // Reset form on success
       setFormData({ title: "", body: "" })
       setTags([])
       setErrors({ title: "", body: "", tags: "" })
     } catch (error) {
-      console.log(error)
+      toast.error(`${error}`)
     }
   }
 
