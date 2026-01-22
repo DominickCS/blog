@@ -2,19 +2,19 @@
 import NavigationBar from "@/app/_components/ui/navbar"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import Image from "next/image"
 import FetchUserDetails from "@/app/_serverActions/(auth)/fetchUserDetails"
 import { toast } from "react-toastify"
 import { Icon } from "@iconify/react";
 import FetchSinglePost from "@/app/_serverActions/(blogFunctions)/fetchSinglePost"
 import BlogPostLikeHandler from "@/app/_serverActions/(blogFunctions)/blogPostLikeHandler"
 import AddNewComment from "@/app/_serverActions/(blogFunctions)/addNewComment"
+import Link from "next/link"
 
 
 export default function BlogPost() {
   const router = useRouter();
   const [loading, setLoading] = useState(true)
-  const [showReplyBox, setShowReplyBox] = useState(false)
+  const [activeReplyId, setActiveReplyId] = useState<string | null>(null)
   const [blogPost, setBlogPost] = useState({
     blogTitle: "",
     blogPublishDate: "",
@@ -90,8 +90,8 @@ export default function BlogPost() {
     fetchBlogPost();
   }, [update]);
 
-  function beginReply() {
-    setShowReplyBox(prev => !prev)
+  function toggleReply(commentId: string) {
+    setActiveReplyId(prev => prev === commentId ? null : commentId)
   }
 
 
@@ -125,7 +125,7 @@ export default function BlogPost() {
           </div>
           <div className="flex text-xs md:text-sm font-light items-center mt-2 justify-evenly">
             {blogPost.blogTags && blogPost.blogTags.map((tag, id) => {
-              return <p className="" key={id}>{tag}</p>
+              return <p className="text-purple-300 hover:text-purple-600 duration-300 hover:tracking-widest" key={id}><Link href={`/tag/${String(tag).substring(1).toLowerCase()}`}>{tag}</Link></p>
             })}
             <p className="">{date}</p>
           </div>
@@ -139,15 +139,15 @@ export default function BlogPost() {
               <div className="my-6">
                 <div className="mt-4 mb-8">
                   <form onSubmit={handleCommentSubmission} className="flex justify-between content-center items-center ">
-                    <textarea id="commentBody" name="commentBody" onChange={handleChange} className="flex-2" placeholder="Add a comment ..." value={formData.commentBody} />
-                    <input type="submit" value={"Add Comment"} className="text-xs max-w-3xs ml-4 border border-black tracking-tighter p-2" />
+                    <textarea id="commentBody" name="commentBody" onChange={handleChange} className="flex-2 border border-black text-xs p-2" placeholder="Add a comment ..." value={formData.commentBody} />
+                    <input type="submit" value={"Add Comment"} className="text-xs max-w-3xs ml-4 border border-black tracking-tighter p-2 rounded-lg" />
                   </form>
                   <hr className="my-8" />
                 </div>
                 {blogPost.blogComments.map((comment) => {
                   return (
-                    <div key={comment.commentPublishDate}>
-                      <div className="my-8 flex content-center items-center">
+                    <div key={comment.id}>
+                      <div className="my-12 flex content-center items-center">
                         <div className="mr-6 font-light text-sm tracking-tighter">
                           <p>{comment.commentAuthor.username}</p>
                           <p className="font-light text-xs">
@@ -156,8 +156,13 @@ export default function BlogPost() {
                         </div>
                         <div className="flex-2 content-center items-center">
                           <p className="text-sm font-normal tracking-tighter">{comment.commentBody}</p>
-                          <button onClick={beginReply} className="text-xs font-light">Reply</button>
-                          <textarea className={showReplyBox ? "" : "hidden"}></textarea>
+                          <button onClick={() => toggleReply(comment.id)} className="text-xs font-light">Reply</button>
+                          <div>
+                            <form className="flex max-w-sm mx-auto mt-2">
+                              <textarea className={activeReplyId === comment.id ? "flex-2 border-black border text-xs" : "hidden"}></textarea>
+                              <input type="submit" value={"Add Reply"} className={activeReplyId === comment.id ? "ml-4 border border-black text-xs rounded-lg px-4" : "hidden"} />
+                            </form>
+                          </div>
                         </div>
                         <div className="text-center text-xs">
                           <p>
