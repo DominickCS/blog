@@ -132,9 +132,9 @@ export default function BlogPost() {
     return (
       <div>
         <NavigationBar />
-        <div className="bg-white rounded-md max-w-md md:max-w-2xl mx-auto p-8 my-8 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60">
-          <div className="my-4">
-            <h1 className="font-mono font-light">{blogPost.blogPostAuthor.username}</h1>
+        <div className="bg-white rounded-md max-w-xs sm:max-w-lg md:max-w-2xl mx-auto p-8 my-8 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60">
+          <div className="my-2">
+            {/* <h1 className="font-mono font-light">{blogPost.blogPostAuthor.username}</h1> */}
           </div>
           <div className="flex items-center justify-evenly">
             <h2 className="text-center text-2xl font-sans max-w-sm font-medium mb-4 tracking-tighter">{blogPost.blogTitle}</h2>
@@ -143,27 +143,26 @@ export default function BlogPost() {
             {blogPost.blogTags && blogPost.blogTags.map((tag, id) => {
               return <p className="text-purple-300 hover:text-purple-600 duration-300 hover:tracking-widest" key={id}><Link href={`/tag/${String(tag).substring(1).toLowerCase()}`}>{tag}</Link></p>
             })}
-            <p className="">{date}</p>
+            <p>{date}</p>
           </div>
-          <hr className="my-4 max-w-lg mx-auto" />
-          <div className="mt-2 mb-16">
+          <div className="mt-8 mb-16">
             <p className="whitespace-pre-wrap">{blogPost.blogBody}</p>
           </div>
           <div className="mb-24">
             <h2 className="text-md font-medium underline-offset-10 underline mb-12">Comments</h2>
             {blogPost.blogComments && blogPost.blogComments.length > 0 ? (
               <div className="my-6">
-                <div className="mt-4 mb-8">
+                <div className="mt-4 mb-8 md:max-w-lg max-w-3xs">
                   <form onSubmit={handleCommentSubmission} className="flex justify-between content-center items-center ">
                     <textarea id="commentBody" name="commentBody" onChange={handleChange} className="flex-2 border border-black text-xs p-2" placeholder="Add a comment ..." value={formData.commentBody} />
                     <input type="submit" value={"Add Comment"} className="text-xs max-w-3xs ml-4 border border-black tracking-tighter p-2 rounded-lg" />
                   </form>
-                  <hr className="my-8" />
+                  <hr className="mt-8 opacity-20" />
                 </div>
                 {blogPost.blogComments.map((comment) => {
                   return (
                     <div key={comment.id}>
-                      <div className="mt-12 flex content-center items-center">
+                      <div className="mt-6 flex content-center items-center">
                         <div className="mr-6 font-light text-sm tracking-tighter">
                           <p>{comment.commentAuthor.username}</p>
                           <p className="font-light text-xs">
@@ -177,7 +176,7 @@ export default function BlogPost() {
                             <form onSubmit={(e) => {
                               e.preventDefault();
                               handleReplySubmission(comment.id);
-                            }} className="flex max-w-sm mx-auto mt-2">
+                            }} className="flex mx-auto mt-2">
                               <textarea name="replyBody" id="replyBody" onChange={handleChange} value={formData.replyBody} className={activeReplyId === comment.id ? "flex-2 border-black border text-xs" : "hidden"}></textarea>
                               <input type="submit" value={"Add Reply"} className={activeReplyId === comment.id ? "ml-4 border border-black text-xs rounded-lg px-4" : "hidden"} />
                             </form>

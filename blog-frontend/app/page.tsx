@@ -9,6 +9,7 @@ import Link from "next/link";
 import FetchBlogPosts from "./_serverActions/(blogFunctions)/fetchBlogPosts";
 import { toast } from "react-toastify";
 import SearchBlogPost from "./_serverActions/(blogFunctions)/searchBlogPosts";
+import { Icon } from "@iconify/react";
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true)
@@ -64,11 +65,11 @@ export default function HomePage() {
     return (
       <div>
         <NavigationBar />
-        <div className="max-w-lg mx-auto">
-          <div className="mx-auto max-w-sm mt-8">
-            <form onSubmit={handleSearch}>
-              <label className="mx-2" htmlFor="searchBox">Search Blog Posts</label>
-              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="bg-white mx-2" />
+        <div className="max-w-sm md:max-w-2xl mx-auto">
+          <div className="mx-auto max-w-xs md:max-w-sm mt-8">
+            <form onSubmit={handleSearch} className="flex items-center">
+              <label className="mx-2" htmlFor="searchBox"><Icon icon={"material-symbols:search-rounded"}></Icon> </label>
+              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="flex-2 bg-white mx-2" />
             </form>
           </div>
           {blogPosts.map((blogPost) => {
@@ -76,11 +77,11 @@ export default function HomePage() {
 
             return (
               <Link key={blogPost.id} href={`/post/${blogPost.id}`}>
-                <div key={blogPost.id} className="hover:rotate-4 hover:scale-110 duration-700 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60 bg-white rounded-xl p-8 my-12">
+                <div key={blogPost.id} className="hover:scale-105 duration-700 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60 bg-white rounded-xl p-8 my-12 mx-auto max-w-xs md:max-w-2xl">
                   <div>
-                    <h1 className="text-3xl my-2 font-semibold">{blogPost.blogTitle}</h1>
+                    <h1 className="text-2xl md:text-3xl my-4 font-semibold font-sans">{blogPost.blogTitle}</h1>
                     <p className="font-extralight mb-2 text-sm">Published on {date}</p>
-                    <div className="flex mb-8 font-light text-red-500/80">
+                    <div className="flex mb-8 font-light text-purple-400">
                       {blogPost.blogTags.map((tag: string, id: number) => {
                         return <p className="mr-2 text-xs font-mono" key={id}>{tag}</p>
                       })}
@@ -92,7 +93,7 @@ export default function HomePage() {
                       :
                       <p>{blogPost.blogBody}</p>
                     }
-                    <div className="mt-12 flex justify-center-safe text-center">
+                    <div className="mt-12 flex justify-center-safe text-center font-serif">
                       <p className="mx-4"><Image alt="A heart icon to signify likes on this blog post." src={HeartSVG} width={20}></Image> {blogPost.blogLikeCount}</p>
                       <p className="mx-4"><Image alt="A bookmark icon to signify the number of bookmarks on this blog post." src={SaveSVG} width={20}></Image>{blogPost.blogSaveCount}</p>
                     </div>
@@ -109,10 +110,10 @@ export default function HomePage() {
       <div>
         <NavigationBar />
         <div className="text-center max-w-lg mx-auto">
-          <div className="mt-8 max-w-sm mx-auto">
-            <form onSubmit={handleSearch}>
-              <label className="mx-2" htmlFor="searchBox">Search Blog Posts</label>
-              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="bg-white mx-2" />
+          <div className="mx-auto max-w-xs md:max-w-sm mt-8">
+            <form onSubmit={handleSearch} className="flex items-center">
+              <label className="mx-2" htmlFor="searchBox"><Icon icon={"material-symbols:search-rounded"}></Icon> </label>
+              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="flex-2 bg-white mx-2" />
             </form>
           </div>
           {formData.searchBox.length > 0 && blogPosts.length == 0 ?

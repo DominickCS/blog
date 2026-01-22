@@ -36,7 +36,7 @@ export default function NavigationBar() {
     return (
       <div className="mt-4 flex content-center items-center justify-evenly max-w-lg md:max-w-xl mx-auto">
         <div>
-          <Link href={'/'} className="hover:text-purple-800 duration-600 hover:tracking-wide text-xl font-mono text-purple-300 tracking-tighter">Developing with DominickCS_</Link>
+          <Link href={'/'} className="hover:text-purple-800 duration-600 hover:tracking-wide font-mono text-purple-300 tracking-tighter md:text-xl text-xs">Developing with DominickCS_</Link>
         </div>
         <div className="flex w-32"></div> {/* Placeholder to prevent layout shift */}
       </div>
@@ -46,7 +46,7 @@ export default function NavigationBar() {
   return (
     <div className="mt-4 flex content-center items-center justify-evenly max-w-lg md:max-w-xl mx-auto">
       <div>
-        <Link href={'/'} className="hover:text-purple-800 duration-600 hover:tracking-wide text-xl font-mono text-purple-300 tracking-tighter">Developing with DominickCS_</Link>
+        <Link href={'/'} className="hover:text-purple-800 duration-600 hover:tracking-wide font-mono text-purple-300 tracking-tighter md:text-xl text-sm">Developing with DominickCS_</Link>
       </div>
       {!isLoggedIn ?
         <div className="flex">
