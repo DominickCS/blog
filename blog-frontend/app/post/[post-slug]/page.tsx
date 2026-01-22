@@ -30,8 +30,20 @@ export default function BlogPost() {
         "username": ""
       },
       commentPublishDate: "",
-
-    }]
+      commentBody: "",
+      commentLikeCount: 0,
+      commentReplies: [{
+        id: "",
+        replyLikeCount: 0,
+        replyBody: "",
+        replyAuthor: {
+          username: ""
+        },
+        replyPublishDate: "",
+      }]
+    }],
+    blogLikeCount: 0,
+    blogSaveCount: 0
 
   })
   const [userLikeList, setUserLikeList] = useState([])
@@ -233,7 +245,19 @@ export default function BlogPost() {
           </div>
           <h2 className="text-center font-light underline-offset-16 underline">Support This Post</h2>
           <div className="mt-8 flex justify-center text-center">
-            <p className="mx-4"><Icon onClick={likeHandler} className={userLikeList.includes(`${blogPostID}`) ? "invert" : ""} icon="material-symbols:favorite"></Icon>{blogPost.blogLikeCount}</p>
+            <p className="mx-4">
+              <Icon
+                onClick={likeHandler}
+                color={userLikeList.includes(blogPostID) ? "red" : "currentColor"}
+                className={
+                  userLikeList.includes(blogPostID)
+                    ? "hover:scale-130 hover:cursor-pointer duration-500"
+                    : "hover:scale-130 hover:cursor-pointer duration-500"
+                }
+                icon="material-symbols:favorite"
+              />
+              {blogPost.blogLikeCount}
+            </p>
             <p className="mx-4"><Icon icon="material-symbols:bookmark"></Icon> {blogPost.blogSaveCount}</p>
           </div>
         </div>

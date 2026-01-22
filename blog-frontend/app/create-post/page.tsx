@@ -81,7 +81,12 @@ export default function CreatePostPage() {
         toast.success(`${response.message}`)
       }
       else {
-        toast.error(`${response.message}`)
+        if (response.message.includes("401")) {
+          toast.error(`You are not authorized to create blog posts, request access by contacting an admin.`)
+        }
+        else {
+          toast.error(`${response.message}`)
+        }
       }
 
       setFormData({ title: "", body: "" })
@@ -158,13 +163,13 @@ export default function CreatePostPage() {
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2"
+                  className="bg-purple-300 text-white font-bold px-4 py-1 rounded flex items-center gap-2"
                 >
                   {tag}
                   <button
                     type="button"
                     onClick={() => removeTag(index)}
-                    className="text-red-500 hover:text-red-700 font-bold"
+                    className="text-white hover:text-red-700 hover:cursor-pointer font-bold"
                   >
                     ×
                   </button>
@@ -175,7 +180,7 @@ export default function CreatePostPage() {
 
           <button
             onClick={handleSubmit}
-            className="bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600 transition-colors font-medium"
+            className="bg-purple-500/80 text-white px-6 py-3 rounded hover:bg-purple-500 transition-colors font-medium"
           >
             Submit Post
           </button>
