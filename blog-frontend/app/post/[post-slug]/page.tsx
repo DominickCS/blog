@@ -1,7 +1,7 @@
 'use client'
 import NavigationBar from "@/app/_components/ui/navbar"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import FetchUserDetails from "@/app/_serverActions/(auth)/fetchUserDetails"
 import { toast } from "react-toastify"
 import { Icon } from "@iconify/react";
@@ -9,6 +9,7 @@ import FetchSinglePost from "@/app/_serverActions/(blogFunctions)/fetchSinglePos
 import BlogPostLikeHandler from "@/app/_serverActions/(blogFunctions)/blogPostLikeHandler"
 import AddNewComment from "@/app/_serverActions/(blogFunctions)/addNewComment"
 import Link from "next/link"
+import AddNewReply from "@/app/_serverActions/(blogFunctions)/addNewReply"
 
 
 export default function BlogPost() {
@@ -38,12 +39,13 @@ export default function BlogPost() {
   const blogPostID = usePathname().split('/')[2]
   const [formData, setFormData] = useState({
     commentBody: "",
+    replyBody: ""
   })
 
   async function handleCommentSubmission(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    setFormData({ commentBody: "" })
+    setFormData({ commentBody: "", replyBody: "" })
     const response = await AddNewComment(blogPostID, formData.commentBody)
     if (!response.isError) {
       toast.success(`${response.message}`)
@@ -53,6 +55,20 @@ export default function BlogPost() {
     }
     setUpdate(prev => !prev)
   }
+
+  async function handleReplySubmission(commentID: string) {
+    toggleReply("")
+    setFormData({ commentBody: "", replyBody: "" })
+    const response = await AddNewReply(commentID, formData.replyBody)
+    if (!response.isError) {
+      toast.success(`${response.message}`)
+    }
+    else {
+      toast.error(`${response.message}`)
+    }
+    setUpdate(prev => !prev)
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -147,7 +163,7 @@ export default function BlogPost() {
                 {blogPost.blogComments.map((comment) => {
                   return (
                     <div key={comment.id}>
-                      <div className="my-12 flex content-center items-center">
+                      <div className="mt-12 flex content-center items-center">
                         <div className="mr-6 font-light text-sm tracking-tighter">
                           <p>{comment.commentAuthor.username}</p>
                           <p className="font-light text-xs">
@@ -158,8 +174,11 @@ export default function BlogPost() {
                           <p className="text-sm font-normal tracking-tighter">{comment.commentBody}</p>
                           <button onClick={() => toggleReply(comment.id)} className="text-xs font-light">Reply</button>
                           <div>
-                            <form className="flex max-w-sm mx-auto mt-2">
-                              <textarea className={activeReplyId === comment.id ? "flex-2 border-black border text-xs" : "hidden"}></textarea>
+                            <form onSubmit={(e) => {
+                              e.preventDefault();
+                              handleReplySubmission(comment.id);
+                            }} className="flex max-w-sm mx-auto mt-2">
+                              <textarea name="replyBody" id="replyBody" onChange={handleChange} value={formData.replyBody} className={activeReplyId === comment.id ? "flex-2 border-black border text-xs" : "hidden"}></textarea>
                               <input type="submit" value={"Add Reply"} className={activeReplyId === comment.id ? "ml-4 border border-black text-xs rounded-lg px-4" : "hidden"} />
                             </form>
                           </div>
@@ -173,15 +192,27 @@ export default function BlogPost() {
                       </div>
 
                       {comment.commentReplies && comment.commentReplies.length > 0 && (
-                        <div className="ml-8">
+                        < div className="ml-6 pl-6 border-l border-black/20">
                           {comment.commentReplies.map((reply) => (
-                            <div key={reply.id} className="my-2">
-                              <p className="text-sm font-light">{reply.replyAuthor.username}</p>
-                              <p className="text-sm">{reply.replyBody}</p>
+                            <div key={reply.id} className="my-8 flex content-center items-center">
+                              <div className="">
+                                <p className="font-light text-sm tracking-tighter">{reply.replyAuthor.username}</p>
+                                <p className="font-light text-xs tracking-tighter">{new Date(reply.replyPublishDate).toLocaleDateString()}</p>
+                              </div>
+                              <div className="ml-4 flex-2">
+                                <p className="text-sm tracking-tighter">{reply.replyBody}</p>
+                              </div>
+                              <div className="text-center text-xs">
+                                <p>
+                                  <Icon icon="material-symbols:favorite"></Icon>
+                                  {reply.replyLikeCount}
+                                </p>
+                              </div>
                             </div>
                           ))}
                         </div>
-                      )}
+                      )
+                      }
                     </div>
                   );
                 })}
