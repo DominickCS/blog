@@ -115,7 +115,11 @@ export default function HomePage() {
               <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="bg-white mx-2" />
             </form>
           </div>
-          <p>No results found for search query {formData.searchBox}</p>
+          {formData.searchBox.length > 0 && blogPosts.length == 0 ?
+            <p>No results found for search query {formData.searchBox}</p>
+            :
+            null
+          }
         </div>
       </div>
     )

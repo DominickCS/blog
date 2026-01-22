@@ -16,11 +16,11 @@ export default async function createNewPost(title: string, body: string, tags: A
       }),
     })
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+    if (!response.data.ok) {
+      throw new Error(`HTTP error! status: ${response.data.status}`)
     }
 
-    return { isError: false, message: `${await response.text()}` }
+    return { isError: false, message: `${await response.data.text()}` }
   } catch (error) {
     return { isError: true, message: `${error}` }
   }
