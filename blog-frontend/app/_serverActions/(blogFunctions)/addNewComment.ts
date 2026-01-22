@@ -12,7 +12,11 @@ export default async function AddNewComment(blogPostID: string, commentBody: str
       })
     })
 
-    console.log(response.data.text())
+    if (response.unauthorized) {
+      return {
+        isError: true, message: "You must be signed in to perform this action."
+      }
+    }
 
     return { isError: false, message: "Comment added to post successfully!" }
   } catch (error) {

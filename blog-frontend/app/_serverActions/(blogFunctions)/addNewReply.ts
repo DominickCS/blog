@@ -12,7 +12,11 @@ export default async function AddNewReply(commentID: string, replyBody: string) 
       })
     })
 
-    console.log(response.data.text())
+    if (response.unauthorized) {
+      return {
+        isError: true, message: "You must be signed in to perform this action."
+      }
+    }
 
     return { isError: false, message: "Reply added to comment successfully!" }
   } catch (error) {

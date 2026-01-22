@@ -52,6 +52,7 @@ export default function BlogPost() {
     }
     else {
       toast.error(`${response.message}`)
+      router.push('/login')
     }
     setUpdate(prev => !prev)
   }
@@ -65,6 +66,7 @@ export default function BlogPost() {
     }
     else {
       toast.error(`${response.message}`)
+      router.push('/login')
     }
     setUpdate(prev => !prev)
   }
@@ -133,9 +135,6 @@ export default function BlogPost() {
       <div>
         <NavigationBar />
         <div className="bg-white rounded-md max-w-xs sm:max-w-lg md:max-w-2xl mx-auto p-8 my-8 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60">
-          <div className="my-2">
-            {/* <h1 className="font-mono font-light">{blogPost.blogPostAuthor.username}</h1> */}
-          </div>
           <div className="flex items-center justify-evenly">
             <h2 className="text-center text-2xl font-sans max-w-sm font-medium mb-4 tracking-tighter">{blogPost.blogTitle}</h2>
           </div>
@@ -152,10 +151,10 @@ export default function BlogPost() {
             <h2 className="text-md font-medium underline-offset-10 underline mb-12">Comments</h2>
             {blogPost.blogComments && blogPost.blogComments.length > 0 ? (
               <div className="my-6">
-                <div className="mt-4 mb-8 md:max-w-lg max-w-3xs">
-                  <form onSubmit={handleCommentSubmission} className="flex justify-between content-center items-center ">
-                    <textarea id="commentBody" name="commentBody" onChange={handleChange} className="flex-2 border border-black text-xs p-2" placeholder="Add a comment ..." value={formData.commentBody} />
-                    <input type="submit" value={"Add Comment"} className="text-xs max-w-3xs ml-4 border border-black tracking-tighter p-2 rounded-lg" />
+                <div className="mt-4 mb-8 md:max-w-lg mx-auto">
+                  <form onSubmit={handleCommentSubmission} className="flex content-center items-center">
+                    <textarea id="commentBody" name="commentBody" onChange={handleChange} className="flex-2 mr-2 md:mr-4 border border-black text-xs" placeholder="Add a comment ..." value={formData.commentBody} />
+                    <input type="submit" value={"Add Comment"} className=" text-xs ml-2 md:ml-4 border border-black tracking-tighter p-2 rounded-lg" />
                   </form>
                   <hr className="mt-8 opacity-20" />
                 </div>
@@ -169,19 +168,11 @@ export default function BlogPost() {
                             {new Date(comment.commentPublishDate).toLocaleDateString()}
                           </p>
                         </div>
-                        <div className="flex-2 content-center items-center">
-                          <p className="text-sm font-normal tracking-tighter">{comment.commentBody}</p>
+                        <div className="flex-2 items-center content-center">
+                          <p className="text-xs font-normal tracking-tighter whitespace-pre-wrap">{comment.commentBody}</p>
                           <button onClick={() => toggleReply(comment.id)} className="text-xs font-light">Reply</button>
-                          <div>
-                            <form onSubmit={(e) => {
-                              e.preventDefault();
-                              handleReplySubmission(comment.id);
-                            }} className="flex mx-auto mt-2">
-                              <textarea name="replyBody" id="replyBody" onChange={handleChange} value={formData.replyBody} className={activeReplyId === comment.id ? "flex-2 border-black border text-xs" : "hidden"}></textarea>
-                              <input type="submit" value={"Add Reply"} className={activeReplyId === comment.id ? "ml-4 border border-black text-xs rounded-lg px-4" : "hidden"} />
-                            </form>
-                          </div>
                         </div>
+
                         <div className="text-center text-xs">
                           <p>
                             <Icon icon="material-symbols:favorite"></Icon>
@@ -189,28 +180,38 @@ export default function BlogPost() {
                           </p>
                         </div>
                       </div>
+                      <div className="mt-2">
+                        <form onSubmit={(e) => {
+                          e.preventDefault();
+                          handleReplySubmission(comment.id);
+                        }} className="flex">
+                          <textarea name="replyBody" id="replyBody" onChange={handleChange} value={formData.replyBody} className={activeReplyId === comment.id ? "border-black border text-xs flex-2" : "hidden"}></textarea>
+                          <input type="submit" value={"Add Reply"} className={activeReplyId === comment.id ? "ml-2 border border-black text-xs font-light rounded-lg px-2 md:px-4" : "hidden"} />
+                        </form>
+                      </div>
 
-                      {comment.commentReplies && comment.commentReplies.length > 0 && (
-                        < div className="ml-6 pl-6 border-l border-black/20">
-                          {comment.commentReplies.map((reply) => (
-                            <div key={reply.id} className="my-8 flex content-center items-center">
-                              <div className="">
-                                <p className="font-light text-sm tracking-tighter">{reply.replyAuthor.username}</p>
-                                <p className="font-light text-xs tracking-tighter">{new Date(reply.replyPublishDate).toLocaleDateString()}</p>
+                      {
+                        comment.commentReplies && comment.commentReplies.length > 0 && (
+                          < div className="pl-4 border-l border-black/20">
+                            {comment.commentReplies.map((reply) => (
+                              <div key={reply.id} className="my-8 flex content-center items-center">
+                                <div className="">
+                                  <p className="font-light text-sm tracking-tighter">{reply.replyAuthor.username}</p>
+                                  <p className="font-light text-xs tracking-tighter">{new Date(reply.replyPublishDate).toLocaleDateString()}</p>
+                                </div>
+                                <div className="ml-4 flex-2">
+                                  <p className="text-xs tracking-tighter">{reply.replyBody}</p>
+                                </div>
+                                <div className="text-center text-xs">
+                                  <p>
+                                    <Icon icon="material-symbols:favorite"></Icon>
+                                    {reply.replyLikeCount}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="ml-4 flex-2">
-                                <p className="text-sm tracking-tighter">{reply.replyBody}</p>
-                              </div>
-                              <div className="text-center text-xs">
-                                <p>
-                                  <Icon icon="material-symbols:favorite"></Icon>
-                                  {reply.replyLikeCount}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )
+                            ))}
+                          </div>
+                        )
                       }
                     </div>
                   );

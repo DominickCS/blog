@@ -81,7 +81,7 @@ export default function LoginPage() {
   return (
     <div className="">
       <NavigationBar />
-      <div className="mt-8">
+      <div className="mt-8 md:max-w-xl mx-auto max-w-3xs">
         <form className="flex flex-col max-w-sm mx-auto" onSubmit={HandleSubmit}>
           <label htmlFor="username">Username</label>
           <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="bg-white" />
@@ -93,7 +93,7 @@ export default function LoginPage() {
         </form>
       </div>
       <div className="mx-auto text-center">
-        {message && message.type === "success" ? <p className="text-green-500/60 font-light">{message.text}</p> : <p className="text-red-500/60">{message.text}</p>}
+        {message && message.type === "success" ? <p className="text-green-500/60 font-medium">{message.text}</p> : <p className="text-red-500/60">{message.text}</p>}
       </div>
     </div>
   )

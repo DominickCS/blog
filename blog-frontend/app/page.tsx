@@ -69,7 +69,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-xs md:max-w-sm mt-8">
             <form onSubmit={handleSearch} className="flex items-center">
               <label className="mx-2" htmlFor="searchBox"><Icon icon={"material-symbols:search-rounded"}></Icon> </label>
-              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="flex-2 bg-white mx-2" />
+              <input onChange={handleChange} placeholder="hello world..." value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="flex-2 bg-white mx-2" />
             </form>
           </div>
           {blogPosts.map((blogPost) => {
@@ -113,7 +113,7 @@ export default function HomePage() {
           <div className="mx-auto max-w-xs md:max-w-sm mt-8">
             <form onSubmit={handleSearch} className="flex items-center">
               <label className="mx-2" htmlFor="searchBox"><Icon icon={"material-symbols:search-rounded"}></Icon> </label>
-              <input onChange={handleChange} value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="flex-2 bg-white mx-2" />
+              <input onChange={handleChange} placeholder="hello world..." value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="flex-2 bg-white mx-2" />
             </form>
           </div>
           {formData.searchBox.length > 0 && blogPosts.length == 0 ?
