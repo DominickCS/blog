@@ -42,8 +42,7 @@ public class User implements UserDetails {
 
   @ElementCollection
   @CollectionTable(name = "user_saved_posts", joinColumns = @JoinColumn(name = "user_id"))
-  @Column(name = "blog_post_id")
-  private List<UUID> savedPosts = new ArrayList<>();
+  private List<SavedPost> savedPosts = new ArrayList<>();
 
   @ElementCollection
   @CollectionTable(name = "user_liked_posts", joinColumns = @JoinColumn(name = "user_id"))

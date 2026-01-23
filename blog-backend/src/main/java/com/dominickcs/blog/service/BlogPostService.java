@@ -17,6 +17,7 @@ import com.dominickcs.blog.entity.BlogComment;
 import com.dominickcs.blog.entity.BlogCommentReply;
 import com.dominickcs.blog.entity.BlogPost;
 import com.dominickcs.blog.entity.LikedPost;
+import com.dominickcs.blog.entity.SavedPost;
 import com.dominickcs.blog.entity.User;
 import com.dominickcs.blog.repository.BlogPostCommentReplyRepository;
 import com.dominickcs.blog.repository.BlogPostCommentRepository;
@@ -145,6 +146,42 @@ public class BlogPostService {
   }
 
   @Transactional
+  public String blogSaveHandler(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user)
+      throws Exception {
+    try {
+      UUID blogPostID = blogPostDTO.getId();
+      BlogPost blogPost = blogPostRepository.findById(blogPostID)
+          .orElseThrow(NoSuchElementException::new);
+      User managedUser = userRepository.findById(user.getId())
+          .orElseThrow(NoSuchElementException::new);
+
+      // Check if user already liked this post
+      Optional<SavedPost> existingSave = managedUser.getSavedPosts().stream()
+          .filter(savedPost -> savedPost.getBlogPostId().equals(blogPostID))
+          .findFirst();
+
+      if (existingSave.isEmpty()) {
+        // Add like
+        SavedPost savedPost = new SavedPost(blogPostID, blogPost.getBlogTitle());
+        managedUser.getSavedPosts().add(savedPost);
+        blogPost.setBlogSaveCount(blogPost.getBlogSaveCount() + 1);
+        userRepository.save(managedUser);
+        blogPostRepository.save(blogPost);
+        return "Blog post was added to " + user.getUsername() + "'s bookmarks.";
+      } else {
+        // Remove like
+        managedUser.getSavedPosts().remove(existingSave.get());
+        blogPost.setBlogSaveCount(blogPost.getBlogSaveCount() - 1);
+        userRepository.save(managedUser);
+        blogPostRepository.save(blogPost);
+        return "Blog post was removed from " + user.getUsername() + "'s bookmarks.";
+      }
+    } catch (Exception e) {
+      return "An error occurred during like transaction: " + e.toString();
+    }
+  }
+
+  @Transactional
   public String commentLikeHandler(@RequestBody BlogPostCommentDTO blogPostCommentDTO,
       @AuthenticationPrincipal User user)
       throws Exception {
@@ -168,6 +205,36 @@ public class BlogPostService {
         userRepository.save(managedUser);
         blogPostCommentRepository.save(blogComment);
         return ("Like to comment was removed from " + managedUser.getUsername().toString() + "'s liked comments.");
+      }
+    } catch (Exception e) {
+      return ("An error occurred during like transaction: " + e.toString());
+    }
+  }
+
+  @Transactional
+  public String replyLikeHandler(@RequestBody BlogPostCommentReplyDTO blogPostCommentReplyDTO,
+      @AuthenticationPrincipal User user)
+      throws Exception {
+    try {
+      UUID replyID = blogPostCommentReplyDTO.getId();
+      BlogCommentReply blogCommentReply = blogPostCommentReplyRepository.findById(replyID)
+          .orElseThrow(NoSuchElementException::new);
+
+      User managedUser = userRepository.findById(user.getId())
+          .orElseThrow(NoSuchElementException::new);
+
+      if (!managedUser.getLikedComments().contains(replyID)) {
+        managedUser.getLikedComments().add(replyID);
+        blogCommentReply.setReplyLikeCount(blogCommentReply.getReplyLikeCount() + 1);
+        userRepository.save(managedUser);
+        blogPostCommentReplyRepository.save(blogCommentReply);
+        return ("Like to reply was added to " + managedUser.getUsername().toString() + "'s liked comments.");
+      } else {
+        managedUser.getLikedComments().remove(replyID);
+        blogCommentReply.setReplyLikeCount(blogCommentReply.getReplyLikeCount() - 1);
+        userRepository.save(managedUser);
+        blogPostCommentReplyRepository.save(blogCommentReply);
+        return ("Like to reply was removed from " + managedUser.getUsername().toString() + "'s liked comments.");
       }
     } catch (Exception e) {
       return ("An error occurred during like transaction: " + e.toString());

@@ -87,4 +87,16 @@ public class BlogPostController {
     return blogPostService.commentLikeHandler(blogPostCommentDTO, user);
   }
 
+  @PostMapping("/like/reply")
+  public String addReplyLike(@RequestBody BlogPostCommentReplyDTO blogPostCommentReplyDTO,
+      @AuthenticationPrincipal User user) throws Exception {
+    return blogPostService.replyLikeHandler(blogPostCommentReplyDTO, user);
+  }
+
+  @PostMapping("/bookmark")
+  public String addBlogBookmark(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user)
+      throws Exception {
+    return blogPostService.blogSaveHandler(blogPostDTO, user);
+  }
+
 }
