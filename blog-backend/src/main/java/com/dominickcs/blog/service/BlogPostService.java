@@ -2,6 +2,7 @@ package com.dominickcs.blog.service;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.dominickcs.blog.dto.BlogPostDTO;
 import com.dominickcs.blog.entity.BlogComment;
 import com.dominickcs.blog.entity.BlogCommentReply;
 import com.dominickcs.blog.entity.BlogPost;
+import com.dominickcs.blog.entity.LikedPost;
 import com.dominickcs.blog.entity.User;
 import com.dominickcs.blog.repository.BlogPostCommentReplyRepository;
 import com.dominickcs.blog.repository.BlogPostCommentRepository;
@@ -111,26 +113,34 @@ public class BlogPostService {
       throws Exception {
     try {
       UUID blogPostID = blogPostDTO.getId();
-      BlogPost blogPost = blogPostRepository.findById(blogPostID).orElseThrow(NoSuchElementException::new);
-
+      BlogPost blogPost = blogPostRepository.findById(blogPostID)
+          .orElseThrow(NoSuchElementException::new);
       User managedUser = userRepository.findById(user.getId())
           .orElseThrow(NoSuchElementException::new);
 
-      if (!managedUser.getLikedPosts().contains(blogPostID)) {
-        managedUser.getLikedPosts().add(blogPostID);
+      // Check if user already liked this post
+      Optional<LikedPost> existingLike = managedUser.getLikedPosts().stream()
+          .filter(likedPost -> likedPost.getBlogPostId().equals(blogPostID))
+          .findFirst();
+
+      if (existingLike.isEmpty()) {
+        // Add like
+        LikedPost likedPost = new LikedPost(blogPostID, blogPost.getBlogTitle());
+        managedUser.getLikedPosts().add(likedPost);
         blogPost.setBlogLikeCount(blogPost.getBlogLikeCount() + 1);
         userRepository.save(managedUser);
         blogPostRepository.save(blogPost);
-        return ("Blog post was added to " + user.getUsername().toString() + "'s likes.");
+        return "Blog post was added to " + user.getUsername() + "'s likes.";
       } else {
-        managedUser.getLikedPosts().remove(blogPostID);
+        // Remove like
+        managedUser.getLikedPosts().remove(existingLike.get());
         blogPost.setBlogLikeCount(blogPost.getBlogLikeCount() - 1);
         userRepository.save(managedUser);
         blogPostRepository.save(blogPost);
-        return ("Blog post was removed from " + user.getUsername().toString() + "'s likes.");
+        return "Blog post was removed from " + user.getUsername() + "'s likes.";
       }
     } catch (Exception e) {
-      return ("An error occurred during like transaction: " + e.toString());
+      return "An error occurred during like transaction: " + e.toString();
     }
   }
 
