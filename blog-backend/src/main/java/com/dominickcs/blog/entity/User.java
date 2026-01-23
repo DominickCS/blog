@@ -50,6 +50,11 @@ public class User implements UserDetails {
   @Column(name = "blog_post_id")
   private List<UUID> likedPosts = new ArrayList<>();
 
+  @ElementCollection
+  @CollectionTable(name = "user_liked_comments", joinColumns = @JoinColumn(name = "user_id"))
+  @Column(name = "comment_id")
+  private List<UUID> likedComments = new ArrayList<>();
+
   // Method Overrides
   @JsonIgnore
   @Override

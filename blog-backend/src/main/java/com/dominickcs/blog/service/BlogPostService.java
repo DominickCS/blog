@@ -134,4 +134,34 @@ public class BlogPostService {
     }
   }
 
+  @Transactional
+  public String commentLikeHandler(@RequestBody BlogPostCommentDTO blogPostCommentDTO,
+      @AuthenticationPrincipal User user)
+      throws Exception {
+    try {
+      UUID blogCommentID = blogPostCommentDTO.getId();
+      BlogComment blogComment = blogPostCommentRepository.findById(blogCommentID)
+          .orElseThrow(NoSuchElementException::new);
+
+      User managedUser = userRepository.findById(user.getId())
+          .orElseThrow(NoSuchElementException::new);
+
+      if (!managedUser.getLikedComments().contains(blogCommentID)) {
+        managedUser.getLikedComments().add(blogCommentID);
+        blogComment.setCommentLikeCount(blogComment.getCommentLikeCount() + 1);
+        userRepository.save(managedUser);
+        blogPostCommentRepository.save(blogComment);
+        return ("Like to comment was added to " + managedUser.getUsername().toString() + "'s liked comments.");
+      } else {
+        managedUser.getLikedComments().remove(blogCommentID);
+        blogComment.setCommentLikeCount(blogComment.getCommentLikeCount() - 1);
+        userRepository.save(managedUser);
+        blogPostCommentRepository.save(blogComment);
+        return ("Like to comment was removed from " + managedUser.getUsername().toString() + "'s liked comments.");
+      }
+    } catch (Exception e) {
+      return ("An error occurred during like transaction: " + e.toString());
+    }
+  }
+
 }

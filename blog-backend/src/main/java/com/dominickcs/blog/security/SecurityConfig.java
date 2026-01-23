@@ -41,7 +41,7 @@ public class SecurityConfig {
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/posts/**").permitAll()
             .requestMatchers("/new/post").hasRole("ADMIN")
-            .requestMatchers("/like").authenticated()
+            .requestMatchers("/like/**").authenticated()
             .anyRequest().authenticated())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .userDetailsService(userDetailsService)
