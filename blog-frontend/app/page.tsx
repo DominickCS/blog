@@ -68,8 +68,8 @@ export default function HomePage() {
     return (
       <div>
         <NavigationBar />
-        <div className="max-w-sm md:max-w-2xl mx-auto">
-          <div className="mx-auto max-w-xs md:max-w-sm mt-8">
+        <div className="mx-auto">
+          <div className="mx-auto max-w-xs md:max-w-3xl mt-12">
             <form onSubmit={handleSearch} className="flex items-center">
               <Label className="mx-2" htmlFor="searchBox"><Icon icon={"material-symbols:search-rounded"} width={20}></Icon> </Label>
               <Input onChange={handleChange} placeholder="hello world..." value={formData.searchBox} type="text" name="searchBox" id="searchBox" className="flex-2 bg-white mx-2" />
@@ -80,7 +80,7 @@ export default function HomePage() {
 
             return (
               <Link key={blogPost.id} href={`/post/${blogPost.id}`}>
-                <Card key={blogPost.id} className="hover:scale-105 duration-200 bg-white my-16 mx-auto max-w-xs md:max-w-2xl">
+                <Card key={blogPost.id} className="hover:scale-105 duration-200 bg-white my-16 mx-auto max-w-sm md:max-w-2xl lg:max-w-4xl xl:max-w-6xl md:py-32">
                   <CardHeader>
                     <CardTitle className="text-xl">{blogPost.blogTitle}</CardTitle>
                     <CardDescription className="font-extralight mb-2 text-sm">Published on {date}</CardDescription>

@@ -37,7 +37,7 @@ export default function NavigationBar() {
   }
 
   return (
-    <NavigationMenu className="max-w-xs md:max-w-md mx-auto mt-4 p-4">
+    <NavigationMenu className="max-w-xs sm:max-w-xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl mx-auto mt-4 p-4">
       <Link href={'/'} className="mx-4 hover:text-white duration-300">Developing with DominickCS_</Link>
       <NavigationMenuList>
         <NavigationMenuItem>

@@ -214,7 +214,7 @@ export default function BlogPost() {
             {blogPost.blogTags && blogPost.blogTags.map((tag, id) => {
               return <p className="text-purple-300 hover:text-purple-600 duration-300 hover:tracking-widest" key={id}><Link href={`/tag/${String(tag).substring(1).toLowerCase()}`}>{tag}</Link></p>
             })}
-            <p className="mt-2 border-t border-black/20">{date}</p>
+            <p className="mt-2 p-2 border-t border-black/20">{date}</p>
           </CardDescription>
           <CardContent className="mt-4 mb-16">
             <p className="whitespace-pre-wrap md:text-lg">{blogPost.blogBody}</p>
@@ -225,10 +225,9 @@ export default function BlogPost() {
               <CardContent className="my-6">
                 <div className="mt-4 mb-8">
                   <form onSubmit={handleCommentSubmission}>
-                    <Textarea id="commentBody" name="commentBody" onChange={handleChange} className="mb-2" placeholder="Add a comment ..." value={formData.commentBody} />
+                    <Textarea id="commentBody" name="commentBody" onChange={handleChange} className="mb-4" placeholder="Add a comment ..." value={formData.commentBody} />
                     <Button type="submit" className="text-xs" >Add Comment</Button>
                   </form>
-                  <hr className="mt-8 opacity-20" />
                 </div>
                 {blogPost.blogComments.map((comment) => {
                   return (
@@ -311,10 +310,9 @@ export default function BlogPost() {
               <div className="my-2">
                 <div className="mt-4 mb-8">
                   <form onSubmit={handleCommentSubmission}>
-                    <Textarea id="commentBody" name="commentBody" onChange={handleChange} className="mb-2" placeholder="Add a comment ..." value={formData.commentBody} />
+                    <Textarea id="commentBody" name="commentBody" onChange={handleChange} className="mb-4" placeholder="Add a comment ..." value={formData.commentBody} />
                     <Button type="submit" className="text-xs" >Add Comment</Button>
                   </form>
-                  <hr className="my-8" />
                 </div>
                 <p>No comments yet... Start a conversation!</p>
               </div>
