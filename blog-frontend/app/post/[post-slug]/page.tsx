@@ -10,6 +10,7 @@ import BlogPostLikeHandler from "@/app/_serverActions/(blogFunctions)/blogPostLi
 import AddNewComment from "@/app/_serverActions/(blogFunctions)/addNewComment"
 import Link from "next/link"
 import AddNewReply from "@/app/_serverActions/(blogFunctions)/addNewReply"
+import BlogCommentLikeHandler from "@/app/_serverActions/(blogFunctions)/blogCommentLikeHandler"
 
 
 export default function BlogPost() {
@@ -47,6 +48,7 @@ export default function BlogPost() {
 
   })
   const [userLikeList, setUserLikeList] = useState([])
+  const [userCommentLikeList, setUserCommentLikeList] = useState([])
   const [update, setUpdate] = useState(true)
   const blogPostID = usePathname().split('/')[2]
   const [formData, setFormData] = useState({
@@ -96,6 +98,7 @@ export default function BlogPost() {
       try {
         const response = await FetchUserDetails()
         setUserLikeList(await response.likedPosts)
+        setUserCommentLikeList(await response.likedComments)
       } catch (error) {
         console.log(error)
       } finally {
@@ -125,13 +128,29 @@ export default function BlogPost() {
   }
 
 
-  async function likeHandler() {
+  async function postLikeHandler() {
     const response = await BlogPostLikeHandler(blogPostID)
     if (!response.isError) {
       if (!userLikeList.includes(`${blogPostID}`)) {
         toast.success("Post added to your likes!")
       } else {
         toast.success("Post removed from your likes!")
+      }
+    }
+    else {
+      toast.error(`${response.message}`)
+      router.push('/login')
+    }
+    setUpdate(prev => !prev)
+  }
+
+  async function commentLikeHandler(id: string) {
+    const response = await BlogCommentLikeHandler(id)
+    if (!response.isError) {
+      if (!userCommentLikeList.includes(`${id}`)) {
+        toast.success("Like success!")
+      } else {
+        toast.success("Like removed!")
       }
     }
     else {
@@ -187,7 +206,16 @@ export default function BlogPost() {
 
                         <div className="text-center text-xs">
                           <p>
-                            <Icon icon="material-symbols:favorite"></Icon>
+                            <Icon
+                              onClick={() => commentLikeHandler(comment.id)}
+                              color={userCommentLikeList.includes(comment.id) ? "red" : "currentColor"}
+                              className={
+                                userCommentLikeList.includes(comment.id)
+                                  ? "hover:scale-130 hover:cursor-pointer duration-500"
+                                  : "hover:scale-130 hover:cursor-pointer duration-500"
+                              }
+                              icon="material-symbols:favorite"
+                            />
                             {comment.commentLikeCount}
                           </p>
                         </div>
@@ -247,7 +275,7 @@ export default function BlogPost() {
           <div className="mt-8 flex justify-center text-center">
             <p className="mx-4">
               <Icon
-                onClick={likeHandler}
+                onClick={postLikeHandler}
                 color={userLikeList.includes(blogPostID) ? "red" : "currentColor"}
                 className={
                   userLikeList.includes(blogPostID)

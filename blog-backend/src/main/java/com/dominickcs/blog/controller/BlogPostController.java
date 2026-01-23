@@ -75,10 +75,16 @@ public class BlogPostController {
     return userRepository.findByUsername(user.getUsername());
   }
 
-  @PostMapping("/like")
+  @PostMapping("/like/post")
   public String addBlogPostLike(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user)
       throws Exception {
     return blogPostService.blogLikeHandler(blogPostDTO, user);
+  }
+
+  @PostMapping("/like/comment")
+  public String addCommentLike(@RequestBody BlogPostCommentDTO blogPostCommentDTO, @AuthenticationPrincipal User user)
+      throws Exception {
+    return blogPostService.commentLikeHandler(blogPostCommentDTO, user);
   }
 
 }
