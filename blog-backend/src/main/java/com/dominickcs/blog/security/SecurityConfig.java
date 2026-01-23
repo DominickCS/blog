@@ -40,6 +40,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/posts/**").permitAll()
+            .requestMatchers("/tag").permitAll()
             .requestMatchers("/new/post").hasRole("ADMIN")
             .requestMatchers("/like/**").authenticated()
             .requestMatchers("/bookmark").authenticated()

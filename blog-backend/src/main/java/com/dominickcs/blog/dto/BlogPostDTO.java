@@ -23,4 +23,5 @@ public class BlogPostDTO {
   private LocalDateTime blogModifyDate;
   private User blogAuthor;
   private String searchQuery;
+  private String tagQuery;
 }

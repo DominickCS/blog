@@ -76,7 +76,6 @@ export default function CreatePostPage() {
 
     try {
       const response = await createNewPost(formData.title, formData.body, tags)
-      console.log(response)
       if (!response.isError) {
         toast.success(`${response.message}`)
       }

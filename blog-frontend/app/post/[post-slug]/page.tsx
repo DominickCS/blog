@@ -101,7 +101,6 @@ export default function BlogPost() {
     const fetchUser = async () => {
       try {
         const response = await FetchUserDetails()
-        console.log(response)
         setUserLikeList(await response.likedPosts)
         setUserCommentLikeList(await response.likedComments)
         setUserReplyLikeList(await response.likedReplies)
@@ -170,7 +169,7 @@ export default function BlogPost() {
   async function commentLikeHandler(id: string) {
     const response = await BlogCommentLikeHandler(id)
     if (!response.isError) {
-      if (!userCommentLikeList.includes(`${id}`)) {
+      if (!userCommentLikeList.find((comment) => id)) {
         toast.success("Like success!")
       } else {
         toast.success("Like removed!")
@@ -186,8 +185,8 @@ export default function BlogPost() {
   async function replyLikeHandler(id: string) {
     const response = await BlogReplyLikeHandler(id)
     if (!response.isError) {
-      if (!userReplyLikeList.includes(`${id}`)) {
-        toast.success("Like success!")
+      if (!userReplyLikeList.find((reply) => id)) {
+        toast.success(`Like success!`)
       } else {
         toast.success("Like removed!")
       }

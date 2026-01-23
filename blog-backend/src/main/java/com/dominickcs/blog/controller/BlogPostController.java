@@ -99,4 +99,11 @@ public class BlogPostController {
     return blogPostService.blogSaveHandler(blogPostDTO, user);
   }
 
+  @PostMapping("/tag")
+  public List<BlogPost> searchTags(@RequestBody BlogPostDTO blogPostDTO) {
+    String tagQuery = blogPostDTO.getTagQuery();
+    return blogPostRepository.findByBlogTagsOrderByBlogPublishDateDesc(tagQuery).stream()
+        .filter(result -> result.getBlogTags().contains(tagQuery)).collect(Collectors.toList());
+  }
+
 }

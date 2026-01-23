@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AddSVG from "@/public/add.svg"
 import { useRouter } from "next/navigation";
+import checkAuth from "@/app/_serverActions/(auth)/checkAuth";
 
 export default function NavigationBar() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function NavigationBar() {
 
   useEffect(() => {
     setMounted(true);
-    setIsLoggedIn(document.cookie.search("token") !== -1);
+    checkAuth().then(setIsLoggedIn);
   }, []);
 
   async function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -38,7 +39,7 @@ export default function NavigationBar() {
         <div>
           <Link href={'/'} className="hover:text-purple-800 duration-600 hover:tracking-wide font-mono text-purple-300 tracking-tighter md:text-xl text-xs">Developing with DominickCS_</Link>
         </div>
-        <div className="flex w-32"></div> {/* Placeholder to prevent layout shift */}
+        <div className="flex w-32"></div>
       </div>
     );
   }

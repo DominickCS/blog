@@ -9,15 +9,20 @@ export default function UserProfilePage() {
     id: "",
     username: "",
     email: "",
-    likedPosts: [],
-    savedPosts: []
+    likedPosts: [{
+      blogPostId: "",
+      blogPostTitle: ""
+    }],
+    savedPosts: [{
+      blogPostId: "",
+      blogPostTitle: ""
+    }]
   })
   const [loading, setLoading] = useState(true)
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const response = await FetchUserDetails()
-        console.log(response)
         setUserDetails(response)
       } catch (error) {
       } finally {
@@ -48,19 +53,27 @@ export default function UserProfilePage() {
             <div className="mt-8 max-w-sm mx-auto">
               <div className="px-8 border-r border-black/20 my-8">
                 <h2 className="underline underline-offset-4">LIKED POSTS</h2>
-                <ul>
-                  {userDetails.likedPosts.map((post, id: number) => {
-                    return <li className="my-2 text-purple-300 hover:text-purple-400 duration-300" key={id}><Link href={`/post/${post.blogPostId}`}>{post.blogPostTitle}</Link></li>
-                  })}
-                </ul>
+                {userDetails.likedPosts.length > 0 ?
+                  <ul>
+                    {userDetails.likedPosts.map((post, id: number) => {
+                      return <li className="my-2 text-purple-300 hover:text-purple-400 duration-300" key={id}><Link href={`/post/${post.blogPostId}`}>{post.blogPostTitle}</Link></li>
+                    })}
+                  </ul>
+                  :
+                  <p className="text-center tracking-tighter font-extralight mt-2">You haven't liked any articles yet...</p>
+                }
               </div>
               <div className="px-8 border-l border-black/20 my-8">
                 <h2 className="underline underline-offset-4">BOOKMARKED POSTS</h2>
-                <ul>
-                  {userDetails.savedPosts.map((post, id: number) => {
-                    return <li className="my-2 text-purple-300 hover:text-purple-400 duration-300" key={id}><Link href={`/post/${post.blogPostId}`}>{post.blogPostTitle}</Link></li>
-                  })}
-                </ul>
+                {userDetails.savedPosts.length > 0 ?
+                  <ul>
+                    {userDetails.savedPosts.map((post, id: number) => {
+                      return <li className="my-2 text-purple-300 hover:text-purple-400 duration-300" key={id}><Link href={`/post/${post.blogPostId}`}>{post.blogPostTitle}</Link></li>
+                    })}
+                  </ul>
+                  :
+                  <p className="text-center tracking-tighter font-extralight mt-2">You haven't bookmarked any articles yet...</p>
+                }
               </div>
             </div>
           </div>
