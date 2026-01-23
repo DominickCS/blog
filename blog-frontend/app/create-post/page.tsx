@@ -1,8 +1,13 @@
 'use client'
 import { useState } from "react";
 import createNewPost from "@/app/_serverActions/(blogFunctions)/createNewPost";
-import NavigationBar from "@/app/_components/ui/navbar";
+import NavigationBar from "@/components/ui/navbar";
 import { toast } from "react-toastify";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function CreatePostPage() {
   const [tags, setTags] = useState<string[]>([])
@@ -99,17 +104,17 @@ export default function CreatePostPage() {
   return (
     <div className="min-h-screen">
       <NavigationBar />
-      <div className="max-w-2xl mx-auto mt-8 p-6">
-        <h1 className="text-3xl font-bold mb-6">Create New Post</h1>
+      <Card className="max-w-2xl mx-auto mt-8 p-6">
+        <CardTitle className="text-3xl font-bold mb-6">Create New Post</CardTitle>
 
-        <div className="flex flex-col space-y-4">
+        <CardContent className="flex flex-col space-y-4">
           <div>
-            <label htmlFor="title" className="block font-medium mb-1">Title</label>
-            <input
+            <Label htmlFor="title" className="block font-medium mb-1">Title</Label>
+            <Input
               type="text"
               id="title"
               name="title"
-              className="w-full bg-white border border-gray-300 rounded px-3 py-2"
+              className="py-2"
               value={formData.title}
               onChange={handleChange}
             />
@@ -117,11 +122,11 @@ export default function CreatePostPage() {
           </div>
 
           <div>
-            <label htmlFor="body" className="block font-medium mb-1">Body</label>
-            <textarea
+            <Label htmlFor="body" className="block font-medium mb-1">Body</Label>
+            <Textarea
               id="body"
               name="body"
-              className="w-full bg-white border border-gray-300 rounded px-3 py-2"
+              className=""
               rows={15}
               value={formData.body}
               onChange={handleChange}
@@ -130,12 +135,12 @@ export default function CreatePostPage() {
           </div>
 
           <div>
-            <label htmlFor="postTags" className="block font-medium mb-1">Tags</label>
+            <Label htmlFor="postTags" className="block font-medium mb-1">Tags</Label>
             <div className="flex gap-2 mb-2">
-              <input
+              <Input
                 type="text"
                 id="postTags"
-                className="flex-1 bg-white border border-gray-300 rounded px-3 py-2"
+                className=""
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={(e) => {
@@ -146,13 +151,13 @@ export default function CreatePostPage() {
                 }}
                 placeholder="Enter a tag"
               />
-              <button
-                className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
+              <Button
+                className=""
                 type="button"
                 onClick={handleTagAdd}
               >
                 ADD TAG
-              </button>
+              </Button>
             </div>
             {errors.tags && <p className="text-red-500 text-sm mt-1">{errors.tags}</p>}
           </div>
@@ -162,29 +167,29 @@ export default function CreatePostPage() {
               {tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="bg-purple-300 text-white font-bold px-4 py-1 rounded flex items-center gap-2"
+                  className="bg-violet-400 text-white text-sm font-bold px-4 py-2 rounded flex items-center gap-2"
                 >
                   {tag}
-                  <button
+                  <Button
                     type="button"
                     onClick={() => removeTag(index)}
-                    className="text-white hover:text-red-700 hover:cursor-pointer font-bold"
+                    className="text-white text-xs hover:text-red-500 hover:cursor-pointer"
                   >
                     ×
-                  </button>
+                  </Button>
                 </span>
               ))}
             </div>
           )}
 
-          <button
+          <Button
             onClick={handleSubmit}
-            className="bg-purple-500/80 text-white px-6 py-3 rounded hover:bg-purple-500 transition-colors font-medium"
+            className="p-8"
           >
             Submit Post
-          </button>
-        </div>
-      </div>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   )
 }

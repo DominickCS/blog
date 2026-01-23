@@ -1,8 +1,12 @@
 'use client'
 
-import NavigationBar from "@/app/_components/ui/navbar"
+import NavigationBar from "@/components/ui/navbar"
 import React, { useState } from "react"
 import Signup from "@/app/_serverActions/(auth)/signup"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false)
@@ -88,20 +92,26 @@ export default function LoginPage() {
   return (
     <div className="">
       <NavigationBar />
-      <div className="mt-8 md:max-w-xl mx-auto max-w-3xs">
-        <form className="flex flex-col max-w-sm mx-auto" onSubmit={HandleSubmit}>
-          <label htmlFor="email">Email Address</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="bg-white" />
-          {errors.email && <p className="text-red-500/60 font-light">{errors.email}</p>}
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="bg-white" />
-          {errors.username && <p className="text-red-500/60 font-light">{errors.username}</p>}
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="bg-white" />
-          {errors.password && <p className="text-red-500/60 font-light">{errors.password}</p>}
-          <button disabled={loading} type="submit" className="bg-white my-8 p-2 hover:cursor-pointer hover:bg-black/20 duration-800" >{loading ? "Signing up..." : "Sign Up"}</button>
-        </form>
-      </div>
+      <Card className="mt-8 md:max-w-xl mx-auto max-w-3xs">
+        <CardHeader>
+          <CardTitle>Register for an account</CardTitle>
+          <CardDescription>Enter your credentials</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={HandleSubmit}>
+            <Label htmlFor="email">Email Address</Label>
+            <Input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="bg-white" />
+            {errors.email && <p className="text-red-500/80 text-xs font-light">{errors.email}</p>}
+            <Label htmlFor="username">Username</Label>
+            <Input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="bg-white" />
+            {errors.username && <p className="text-red-500/80 text-xs font-light">{errors.username}</p>}
+            <Label htmlFor="password">Password</Label>
+            <Input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="bg-white" />
+            {errors.password && <p className="text-red-500/80 text-xs font-light">{errors.password}</p>}
+            <Button disabled={loading} type="submit" className="hover:cursor-pointer mt-4" >{loading ? "Signing up..." : "Sign Up"}</Button>
+          </form>
+        </CardContent>
+      </Card>
       <div className="mx-auto text-center">
         {message && message.type === "success" ? <p className="text-green-500/60 font-medium">{message.text}</p> : <p className="text-red-500/60">{message.text}</p>}
       </div>

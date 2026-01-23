@@ -1,5 +1,5 @@
 'use client'
-import NavigationBar from "@/app/_components/ui/navbar"
+import NavigationBar from "@/components/ui/navbar"
 import { usePathname, useRouter } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import FetchUserDetails from "@/app/_serverActions/(auth)/fetchUserDetails"
@@ -13,6 +13,9 @@ import AddNewReply from "@/app/_serverActions/(blogFunctions)/addNewReply"
 import BlogCommentLikeHandler from "@/app/_serverActions/(blogFunctions)/blogCommentLikeHandler"
 import BlogReplyLikeHandler from "@/app/_serverActions/(blogFunctions)/blogReplyLikeHandler"
 import BlogPostBookmarkHandler from "@/app/_serverActions/(blogFunctions)/blogPostBookmarkHandler"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
 
 
 export default function BlogPost() {
@@ -203,27 +206,27 @@ export default function BlogPost() {
     return (
       <div>
         <NavigationBar />
-        <div className="bg-white rounded-md max-w-xs sm:max-w-lg md:max-w-2xl mx-auto p-8 my-8 border-8 border-black/10 shadow-lg shadow-black/60 dark:shadow-white/60">
-          <div className="flex items-center justify-evenly">
-            <h2 className="text-center text-2xl font-sans max-w-sm font-medium mb-4 tracking-tighter">{blogPost.blogTitle}</h2>
-          </div>
-          <div className="flex text-xs md:text-sm font-light items-center mt-2 justify-evenly">
+        <Card className="bg-white max-w-xs sm:max-w-lg md:max-w-3/4 mx-auto my-8">
+          <CardHeader className="flex items-center justify-evenly">
+            <CardTitle className="text-center text-3xl mb-4">{blogPost.blogTitle}</CardTitle>
+          </CardHeader>
+          <CardDescription className="mx-auto text-center">
             {blogPost.blogTags && blogPost.blogTags.map((tag, id) => {
               return <p className="text-purple-300 hover:text-purple-600 duration-300 hover:tracking-widest" key={id}><Link href={`/tag/${String(tag).substring(1).toLowerCase()}`}>{tag}</Link></p>
             })}
-            <p>{date}</p>
-          </div>
-          <div className="mt-8 mb-16">
-            <p className="whitespace-pre-wrap">{blogPost.blogBody}</p>
-          </div>
-          <div className="mb-24">
-            <h2 className="text-md font-medium underline-offset-10 underline mb-12">Comments</h2>
+            <p className="mt-2 border-t border-black/20">{date}</p>
+          </CardDescription>
+          <CardContent className="mt-4 mb-16">
+            <p className="whitespace-pre-wrap md:text-lg">{blogPost.blogBody}</p>
+          </CardContent>
+          <CardContent className="mb-8">
+            <CardHeader className="text-md font-medium underline-offset-4 underline">Comments</CardHeader>
             {blogPost.blogComments && blogPost.blogComments.length > 0 ? (
-              <div className="my-6">
-                <div className="mt-4 mb-8 md:max-w-lg mx-auto">
-                  <form onSubmit={handleCommentSubmission} className="flex content-center items-center">
-                    <textarea id="commentBody" name="commentBody" onChange={handleChange} className="flex-2 mr-2 md:mr-4 border border-black text-xs" placeholder="Add a comment ..." value={formData.commentBody} />
-                    <input type="submit" value={"Add Comment"} className=" text-xs ml-2 md:ml-4 border border-black tracking-tighter p-2 rounded-lg" />
+              <CardContent className="my-6">
+                <div className="mt-4 mb-8">
+                  <form onSubmit={handleCommentSubmission}>
+                    <Textarea id="commentBody" name="commentBody" onChange={handleChange} className="mb-2" placeholder="Add a comment ..." value={formData.commentBody} />
+                    <Button type="submit" className="text-xs" >Add Comment</Button>
                   </form>
                   <hr className="mt-8 opacity-20" />
                 </div>
@@ -238,7 +241,7 @@ export default function BlogPost() {
                           </p>
                         </div>
                         <div className="flex-2 items-center content-center">
-                          <p className="text-xs font-normal tracking-tighter whitespace-pre-wrap">{comment.commentBody}</p>
+                          <p className="text-xs whitespace-pre-wrap">{comment.commentBody}</p>
                           <button onClick={() => toggleReply(comment.id)} className="text-xs font-light hover:cursor-pointer">Reply</button>
                         </div>
 
@@ -262,9 +265,9 @@ export default function BlogPost() {
                         <form onSubmit={(e) => {
                           e.preventDefault();
                           handleReplySubmission(comment.id);
-                        }} className="flex">
-                          <textarea name="replyBody" id="replyBody" onChange={handleChange} value={formData.replyBody} className={activeReplyId === comment.id ? "border-black border text-xs flex-2" : "hidden"}></textarea>
-                          <input type="submit" value={"Add Reply"} className={activeReplyId === comment.id ? "ml-2 border border-black text-xs font-light rounded-lg px-2 md:px-4" : "hidden"} />
+                        }} className="flex items-center">
+                          <Textarea name="replyBody" id="replyBody" onChange={handleChange} value={formData.replyBody} className={activeReplyId === comment.id ? "text-xs" : "hidden"}></Textarea>
+                          <Button type="submit" className={activeReplyId === comment.id ? "ml-2 text-xs w-2/5" : "hidden"} >Add Reply </Button>
                         </form>
                       </div>
 
@@ -278,7 +281,7 @@ export default function BlogPost() {
                                   <p className="font-light text-xs tracking-tighter">{new Date(reply.replyPublishDate).toLocaleDateString()}</p>
                                 </div>
                                 <div className="ml-4 flex-2">
-                                  <p className="text-xs tracking-tighter">{reply.replyBody}</p>
+                                  <p className="text-xs">{reply.replyBody}</p>
                                 </div>
                                 <div className="text-center text-xs">
                                   <p>
@@ -303,13 +306,13 @@ export default function BlogPost() {
                     </div>
                   );
                 })}
-              </div>
+              </CardContent>
             ) : (
-              <div className="my-6">
+              <div className="my-2">
                 <div className="mt-4 mb-8">
-                  <form onSubmit={handleCommentSubmission} className="flex justify-between content-center items-center ">
-                    <textarea onChange={handleChange} name="commentBody" id="commentBody" value={formData.commentBody} className="flex-2" placeholder="Add a comment ..." />
-                    <input type="submit" value={"Add Comment"} className="text-xs max-w-3xs ml-4 border border-black tracking-tighter p-2" />
+                  <form onSubmit={handleCommentSubmission}>
+                    <Textarea id="commentBody" name="commentBody" onChange={handleChange} className="mb-2" placeholder="Add a comment ..." value={formData.commentBody} />
+                    <Button type="submit" className="text-xs" >Add Comment</Button>
                   </form>
                   <hr className="my-8" />
                 </div>
@@ -317,15 +320,15 @@ export default function BlogPost() {
               </div>
 
             )}
-          </div>
+          </CardContent>
           <h2 className="text-center font-light underline-offset-16 underline">Support This Post</h2>
-          <div className="mt-8 flex justify-center text-center">
+          <CardFooter className="mt-2 flex justify-center text-center">
             <p className="mx-4">
               <Icon
                 onClick={postLikeHandler}
-                color={userLikeList.values().find((post) => blogPostID) ? "red" : "currentColor"}
+                color={userLikeList.values().find(post => post.blogPostId === blogPostID) ? "red" : "currentColor"}
                 className={
-                  userLikeList.values().find((post) => blogPostID)
+                  userLikeList.values().find(post => post.blogPostId === blogPostID)
                     ? "hover:scale-130 hover:cursor-pointer duration-500"
                     : "hover:scale-130 hover:cursor-pointer duration-500"
                 }
@@ -334,14 +337,14 @@ export default function BlogPost() {
               {blogPost.blogLikeCount}
             </p>
             <p className="mx-4"><Icon onClick={() => postBookmarkHandler(blogPostID)}
-              color={userBookmarksList.values().find((post) => blogPostID) ? "gold" : "currentColor"}
+              color={userBookmarksList.values().find(post => post.blogPostId === blogPostID) ? "gold" : "currentColor"}
               className={
                 userBookmarksList.values().find((post) => blogPostID)
                   ? "hover:scale-130 hover:cursor-pointer duration-500"
                   : "hover:scale-130 hover:cursor-pointer duration-500"
               } icon="material-symbols:bookmark"></Icon> {blogPost.blogSaveCount}</p>
-          </div>
-        </div>
+          </CardFooter>
+        </Card >
       </div >
     )
   } else {

@@ -54,9 +54,9 @@
   --color-chart-5: var(--chart-5);
 
   --spacing-boxShadowX: 4px;
-  --spacing-boxShadowY: 2px;
+  --spacing-boxShadowY: 4px;
   --spacing-reverseBoxShadowX: -4px;
-  --spacing-reverseBoxShadowY: -2px;
+  --spacing-reverseBoxShadowY: -4px;
   --radius-base: 5px;
   --shadow-shadow: var(--shadow);
   --font-weight-base: 600;

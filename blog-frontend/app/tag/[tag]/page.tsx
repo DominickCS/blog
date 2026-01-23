@@ -1,6 +1,6 @@
 'use client'
 
-import NavigationBar from "@/app/_components/ui/navbar"
+import NavigationBar from "@/components/ui/navbar"
 import SearchByTag from "@/app/_serverActions/(blogFunctions)/searchByTag"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
