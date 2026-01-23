@@ -4,7 +4,7 @@ import { authenticatedRequest } from "@/app/lib/api"
 
 export default async function BlogReplyLikeHandler(replyID: string) {
   try {
-    const response = await authenticatedRequest(`${process.env.API_URL}/like/comment`, {
+    const response = await authenticatedRequest(`${process.env.API_URL}/like/reply`, {
       method: "POST",
       body: JSON.stringify({
         "id": replyID
@@ -17,7 +17,7 @@ export default async function BlogReplyLikeHandler(replyID: string) {
       }
     }
 
-    return { isError: false, message: "BlogCommentLikeHandler function completed sucessfully!" }
+    return { isError: false, message: "BlogReplyLikeHandler function completed sucessfully!" }
   } catch (error) {
     return { isError: true, message: error }
   }

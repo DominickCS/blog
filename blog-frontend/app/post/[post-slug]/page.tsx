@@ -12,6 +12,7 @@ import Link from "next/link"
 import AddNewReply from "@/app/_serverActions/(blogFunctions)/addNewReply"
 import BlogCommentLikeHandler from "@/app/_serverActions/(blogFunctions)/blogCommentLikeHandler"
 import BlogReplyLikeHandler from "@/app/_serverActions/(blogFunctions)/blogReplyLikeHandler"
+import BlogPostBookmarkHandler from "@/app/_serverActions/(blogFunctions)/blogPostBookmarkHandler"
 
 
 export default function BlogPost() {
@@ -51,6 +52,7 @@ export default function BlogPost() {
   const [userLikeList, setUserLikeList] = useState([])
   const [userCommentLikeList, setUserCommentLikeList] = useState([])
   const [userReplyLikeList, setUserReplyLikeList] = useState([])
+  const [userBookmarksList, setUserBookmarksList] = useState([])
   const [update, setUpdate] = useState(true)
   const blogPostID = usePathname().split('/')[2]
   const [formData, setFormData] = useState({
@@ -103,6 +105,7 @@ export default function BlogPost() {
         setUserLikeList(await response.likedPosts)
         setUserCommentLikeList(await response.likedComments)
         setUserReplyLikeList(await response.likedReplies)
+        setUserBookmarksList(await response.savedPosts)
       } catch (error) {
         console.log(error)
       } finally {
@@ -131,27 +134,27 @@ export default function BlogPost() {
     setActiveReplyId(prev => prev === commentId ? null : commentId)
   }
 
-  // async function postLikeHandler() {
-  //   const response = await BlogPostLikeHandler(blogPostID)
-  //   if (!response.isError) {
-  //     if (!userLikeList.includes(`${blogPostID}`)) {
-  //       toast.success("Post added to your likes!")
-  //     } else {
-  //       toast.success("Post removed from your likes!")
-  //     }
-  //   }
-  //   else {
-  //     toast.error(`${response.message}`)
-  //     router.push('/login')
-  //   }
-  //   setUpdate(prev => !prev)
-  // }
+  async function postBookmarkHandler() {
+    const response = await BlogPostBookmarkHandler(blogPostID)
+    if (!response.isError) {
+      if (!userBookmarksList.values().find((post) => blogPostID)) {
+        toast.success("Post added to your bookmarks!")
+      } else {
+        toast.success("Post removed from your bookmarks!")
+      }
+    }
+    else {
+      toast.error(`${response.message}`)
+      router.push('/login')
+    }
+    setUpdate(prev => !prev)
+  }
 
 
   async function postLikeHandler() {
     const response = await BlogPostLikeHandler(blogPostID)
     if (!response.isError) {
-      if (!userLikeList.includes(`${blogPostID}`)) {
+      if (!userLikeList.values().find((post) => blogPostID)) {
         toast.success("Post added to your likes!")
       } else {
         toast.success("Post removed from your likes!")
@@ -237,7 +240,7 @@ export default function BlogPost() {
                         </div>
                         <div className="flex-2 items-center content-center">
                           <p className="text-xs font-normal tracking-tighter whitespace-pre-wrap">{comment.commentBody}</p>
-                          <button onClick={() => toggleReply(comment.id)} className="text-xs font-light">Reply</button>
+                          <button onClick={() => toggleReply(comment.id)} className="text-xs font-light hover:cursor-pointer">Reply</button>
                         </div>
 
                         <div className="text-center text-xs">
@@ -282,9 +285,9 @@ export default function BlogPost() {
                                   <p>
                                     <Icon
                                       onClick={() => replyLikeHandler(reply.id)}
-                                      color={userCommentLikeList.includes(reply.id) ? "red" : "currentColor"}
+                                      color={userReplyLikeList.includes(reply.id) ? "red" : "currentColor"}
                                       className={
-                                        userCommentLikeList.includes(reply.id)
+                                        userReplyLikeList.includes(reply.id)
                                           ? "hover:scale-130 hover:cursor-pointer duration-500"
                                           : "hover:scale-130 hover:cursor-pointer duration-500"
                                       }
@@ -321,9 +324,9 @@ export default function BlogPost() {
             <p className="mx-4">
               <Icon
                 onClick={postLikeHandler}
-                color={userLikeList.includes(blogPostID) ? "red" : "currentColor"}
+                color={userLikeList.values().find((post) => blogPostID) ? "red" : "currentColor"}
                 className={
-                  userLikeList.includes(blogPostID)
+                  userLikeList.values().find((post) => blogPostID)
                     ? "hover:scale-130 hover:cursor-pointer duration-500"
                     : "hover:scale-130 hover:cursor-pointer duration-500"
                 }
@@ -331,7 +334,13 @@ export default function BlogPost() {
               />
               {blogPost.blogLikeCount}
             </p>
-            <p className="mx-4"><Icon icon="material-symbols:bookmark"></Icon> {blogPost.blogSaveCount}</p>
+            <p className="mx-4"><Icon onClick={() => postBookmarkHandler(blogPostID)}
+              color={userBookmarksList.values().find((post) => blogPostID) ? "gold" : "currentColor"}
+              className={
+                userBookmarksList.values().find((post) => blogPostID)
+                  ? "hover:scale-130 hover:cursor-pointer duration-500"
+                  : "hover:scale-130 hover:cursor-pointer duration-500"
+              } icon="material-symbols:bookmark"></Icon> {blogPost.blogSaveCount}</p>
           </div>
         </div>
       </div >

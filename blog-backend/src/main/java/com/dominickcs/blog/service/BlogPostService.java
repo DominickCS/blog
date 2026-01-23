@@ -223,7 +223,7 @@ public class BlogPostService {
       User managedUser = userRepository.findById(user.getId())
           .orElseThrow(NoSuchElementException::new);
 
-      if (!managedUser.getLikedComments().contains(replyID)) {
+      if (!managedUser.getLikedReplies().contains(replyID)) {
         managedUser.getLikedReplies().add(replyID);
         blogCommentReply.setReplyLikeCount(blogCommentReply.getReplyLikeCount() + 1);
         userRepository.save(managedUser);
