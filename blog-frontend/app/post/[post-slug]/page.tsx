@@ -11,6 +11,7 @@ import AddNewComment from "@/app/_serverActions/(blogFunctions)/addNewComment"
 import Link from "next/link"
 import AddNewReply from "@/app/_serverActions/(blogFunctions)/addNewReply"
 import BlogCommentLikeHandler from "@/app/_serverActions/(blogFunctions)/blogCommentLikeHandler"
+import BlogReplyLikeHandler from "@/app/_serverActions/(blogFunctions)/blogReplyLikeHandler"
 
 
 export default function BlogPost() {
@@ -112,6 +113,7 @@ export default function BlogPost() {
     const fetchBlogPost = async () => {
       try {
         const response = await FetchSinglePost(blogPostID)
+        console.log(response.data)
         setBlogPost(response.data)
       } catch (error) {
         toast.error(`Error fetching blog post: ${error}`)
@@ -126,6 +128,22 @@ export default function BlogPost() {
   function toggleReply(commentId: string) {
     setActiveReplyId(prev => prev === commentId ? null : commentId)
   }
+
+  // async function postLikeHandler() {
+  //   const response = await BlogPostLikeHandler(blogPostID)
+  //   if (!response.isError) {
+  //     if (!userLikeList.includes(`${blogPostID}`)) {
+  //       toast.success("Post added to your likes!")
+  //     } else {
+  //       toast.success("Post removed from your likes!")
+  //     }
+  //   }
+  //   else {
+  //     toast.error(`${response.message}`)
+  //     router.push('/login')
+  //   }
+  //   setUpdate(prev => !prev)
+  // }
 
 
   async function postLikeHandler() {
@@ -146,6 +164,22 @@ export default function BlogPost() {
 
   async function commentLikeHandler(id: string) {
     const response = await BlogCommentLikeHandler(id)
+    if (!response.isError) {
+      if (!userCommentLikeList.includes(`${id}`)) {
+        toast.success("Like success!")
+      } else {
+        toast.success("Like removed!")
+      }
+    }
+    else {
+      toast.error(`${response.message}`)
+      router.push('/login')
+    }
+    setUpdate(prev => !prev)
+  }
+
+  async function replyLikeHandler(id: string) {
+    const response = await BlogReplyLikeHandler(id)
     if (!response.isError) {
       if (!userCommentLikeList.includes(`${id}`)) {
         toast.success("Like success!")
@@ -244,7 +278,16 @@ export default function BlogPost() {
                                 </div>
                                 <div className="text-center text-xs">
                                   <p>
-                                    <Icon icon="material-symbols:favorite"></Icon>
+                                    <Icon
+                                      onClick={() => replyLikeHandler(reply.id)}
+                                      color={userCommentLikeList.includes(reply.id) ? "red" : "currentColor"}
+                                      className={
+                                        userCommentLikeList.includes(reply.id)
+                                          ? "hover:scale-130 hover:cursor-pointer duration-500"
+                                          : "hover:scale-130 hover:cursor-pointer duration-500"
+                                      }
+                                      icon="material-symbols:favorite"
+                                    />
                                     {reply.replyLikeCount}
                                   </p>
                                 </div>

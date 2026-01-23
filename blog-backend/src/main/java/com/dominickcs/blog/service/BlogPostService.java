@@ -224,13 +224,13 @@ public class BlogPostService {
           .orElseThrow(NoSuchElementException::new);
 
       if (!managedUser.getLikedComments().contains(replyID)) {
-        managedUser.getLikedComments().add(replyID);
+        managedUser.getLikedReplies().add(replyID);
         blogCommentReply.setReplyLikeCount(blogCommentReply.getReplyLikeCount() + 1);
         userRepository.save(managedUser);
         blogPostCommentReplyRepository.save(blogCommentReply);
         return ("Like to reply was added to " + managedUser.getUsername().toString() + "'s liked comments.");
       } else {
-        managedUser.getLikedComments().remove(replyID);
+        managedUser.getLikedReplies().remove(replyID);
         blogCommentReply.setReplyLikeCount(blogCommentReply.getReplyLikeCount() - 1);
         userRepository.save(managedUser);
         blogPostCommentReplyRepository.save(blogCommentReply);
