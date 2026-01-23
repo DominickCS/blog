@@ -50,6 +50,7 @@ export default function BlogPost() {
   })
   const [userLikeList, setUserLikeList] = useState([])
   const [userCommentLikeList, setUserCommentLikeList] = useState([])
+  const [userReplyLikeList, setUserReplyLikeList] = useState([])
   const [update, setUpdate] = useState(true)
   const blogPostID = usePathname().split('/')[2]
   const [formData, setFormData] = useState({
@@ -98,8 +99,10 @@ export default function BlogPost() {
     const fetchUser = async () => {
       try {
         const response = await FetchUserDetails()
+        console.log(response)
         setUserLikeList(await response.likedPosts)
         setUserCommentLikeList(await response.likedComments)
+        setUserReplyLikeList(await response.likedReplies)
       } catch (error) {
         console.log(error)
       } finally {
@@ -113,7 +116,6 @@ export default function BlogPost() {
     const fetchBlogPost = async () => {
       try {
         const response = await FetchSinglePost(blogPostID)
-        console.log(response.data)
         setBlogPost(response.data)
       } catch (error) {
         toast.error(`Error fetching blog post: ${error}`)
@@ -181,7 +183,7 @@ export default function BlogPost() {
   async function replyLikeHandler(id: string) {
     const response = await BlogReplyLikeHandler(id)
     if (!response.isError) {
-      if (!userCommentLikeList.includes(`${id}`)) {
+      if (!userReplyLikeList.includes(`${id}`)) {
         toast.success("Like success!")
       } else {
         toast.success("Like removed!")
