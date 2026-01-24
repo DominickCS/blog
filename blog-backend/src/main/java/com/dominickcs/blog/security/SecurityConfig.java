@@ -42,6 +42,7 @@ public class SecurityConfig {
             .requestMatchers("/posts/**").permitAll()
             .requestMatchers("/tag").permitAll()
             .requestMatchers("/new/post").hasRole("ADMIN")
+            .requestMatchers("/delete/**").hasRole("ADMIN")
             .requestMatchers("/like/**").authenticated()
             .requestMatchers("/bookmark").authenticated()
             .anyRequest().authenticated())

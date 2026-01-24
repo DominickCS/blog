@@ -1,6 +1,7 @@
 package com.dominickcs.blog.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -104,6 +105,13 @@ public class BlogPostController {
     String tagQuery = blogPostDTO.getTagQuery();
     return blogPostRepository.findByBlogTagsOrderByBlogPublishDateDesc(tagQuery).stream()
         .filter(result -> result.getBlogTags().contains(tagQuery)).collect(Collectors.toList());
+  }
+
+  @PostMapping("/delete/post")
+  public String deletePost(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user) throws Exception {
+    BlogPost postToDelete = blogPostRepository.findById(blogPostDTO.getId()).orElseThrow(NoSuchElementException::new);
+    blogPostRepository.delete(postToDelete);
+    return ("Blog post deleted successfully!");
   }
 
 }

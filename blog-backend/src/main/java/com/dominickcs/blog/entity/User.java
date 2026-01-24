@@ -59,7 +59,6 @@ public class User implements UserDetails {
   private List<UUID> likedReplies = new ArrayList<>();
 
   // Method Overrides
-  @JsonIgnore
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role));

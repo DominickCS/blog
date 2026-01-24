@@ -16,6 +16,8 @@ import BlogPostBookmarkHandler from "@/app/_serverActions/(blogFunctions)/blogPo
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import DeleteBlogPost from "@/app/_serverActions/(blogFunctions)/deleteBlogPost"
 
 
 export default function BlogPost() {
@@ -56,12 +58,24 @@ export default function BlogPost() {
   const [userCommentLikeList, setUserCommentLikeList] = useState([])
   const [userReplyLikeList, setUserReplyLikeList] = useState([])
   const [userBookmarksList, setUserBookmarksList] = useState([])
+  const [userPermissions, setUserPermissions] = useState([])
   const [update, setUpdate] = useState(true)
   const blogPostID = usePathname().split('/')[2]
   const [formData, setFormData] = useState({
     commentBody: "",
     replyBody: ""
   })
+
+  async function handlePostDeletion() {
+    const response = await DeleteBlogPost(blogPostID)
+    if (!response.isError) {
+      toast.success(`${response.message}`)
+      router.push("/")
+    }
+    else {
+      toast.error(`${response.message}`)
+    }
+  }
 
   async function handleCommentSubmission(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -104,6 +118,7 @@ export default function BlogPost() {
     const fetchUser = async () => {
       try {
         const response = await FetchUserDetails()
+        setUserPermissions(await response.authorities.map(role => role.authority))
         setUserLikeList(await response.likedPosts)
         setUserCommentLikeList(await response.likedComments)
         setUserReplyLikeList(await response.likedReplies)
@@ -207,7 +222,7 @@ export default function BlogPost() {
       <div>
         <NavigationBar />
         <Card className="bg-white max-w-xs sm:max-w-lg md:max-w-3/4 mx-auto my-8">
-          <CardHeader className="flex items-center justify-evenly">
+          <CardHeader className="flex items-center justify-center">
             <CardTitle className="text-center text-3xl mb-4">{blogPost.blogTitle}</CardTitle>
           </CardHeader>
           <CardDescription className="mx-auto text-center">
@@ -342,6 +357,25 @@ export default function BlogPost() {
                   : "hover:scale-130 hover:cursor-pointer duration-500"
               } icon="material-symbols:bookmark"></Icon> {blogPost.blogSaveCount}</p>
           </CardFooter>
+          {userPermissions.includes("ROLE_ADMIN") ?
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="mx-auto mt-8" variant={"noShadow"}>Manage post</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    Edit Post
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handlePostDeletion}>
+                    Delete Post
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            :
+            null
+          }
         </Card >
       </div >
     )
