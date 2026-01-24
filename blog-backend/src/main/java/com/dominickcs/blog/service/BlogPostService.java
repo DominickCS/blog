@@ -241,4 +241,14 @@ public class BlogPostService {
     }
   }
 
+  @Transactional
+  public String deleteBlogPost(@RequestBody BlogPostDTO blogPostDTO)
+      throws Exception {
+    BlogPost postToDelete = blogPostRepository.findById(blogPostDTO.getId()).orElseThrow(NoSuchElementException::new);
+    userRepository.removeSavedPostFromAllUsers(blogPostDTO.getId());
+    userRepository.removeLikedPostFromAllUsers(blogPostDTO.getId());
+    blogPostRepository.delete(postToDelete);
+    return ("Blog post deleted successfully!");
+  }
+
 }

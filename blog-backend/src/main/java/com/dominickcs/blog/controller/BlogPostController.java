@@ -19,6 +19,8 @@ import com.dominickcs.blog.repository.BlogPostRepository;
 import com.dominickcs.blog.repository.UserRepository;
 import com.dominickcs.blog.service.BlogPostService;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -108,10 +110,8 @@ public class BlogPostController {
   }
 
   @PostMapping("/delete/post")
-  public String deletePost(@RequestBody BlogPostDTO blogPostDTO, @AuthenticationPrincipal User user) throws Exception {
-    BlogPost postToDelete = blogPostRepository.findById(blogPostDTO.getId()).orElseThrow(NoSuchElementException::new);
-    blogPostRepository.delete(postToDelete);
-    return ("Blog post deleted successfully!");
+  public String deletePost(@RequestBody BlogPostDTO blogPostDTO) throws Exception {
+    return blogPostService.deleteBlogPost(blogPostDTO);
   }
 
 }
