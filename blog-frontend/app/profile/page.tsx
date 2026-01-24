@@ -49,12 +49,12 @@ export default function UserProfilePage() {
     return (
       <div>
         <NavigationBar />
-        <Card className="mt-16 max-w-5/6 mx-auto">
+        <Card className="mt-16 max-w-xs sm:max-w-lg mx-auto">
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Hello, {userDetails.username}!</CardTitle>
-            <div className="mt-8 mx-auto w-3/4">
-              <Card className="p-8">
-                <CardHeader className="underline underline-offset-4">LIKED POSTS</CardHeader>
+            <div className="mt-8 mx-auto w-full">
+              <Card className="px-2">
+                <CardHeader className="underline underline-offset-4 text-xs font-light">LIKED POSTS</CardHeader>
                 {userDetails.likedPosts.length > 0 ?
                   <ul>
                     {userDetails.likedPosts.map((post, id: number) => {
@@ -66,7 +66,7 @@ export default function UserProfilePage() {
                 }
               </Card>
               <Card className="p-8 my-8">
-                <CardHeader className="underline underline-offset-4">BOOKMARKED POSTS</CardHeader>
+                <CardHeader className="underline underline-offset-4 text-xs font-light">BOOKMARKED POSTS</CardHeader>
                 {userDetails.savedPosts.length > 0 ?
                   <ul>
                     {userDetails.savedPosts.map((post, id: number) => {
@@ -79,7 +79,7 @@ export default function UserProfilePage() {
               </Card>
             </div>
           </CardHeader>
-          <p className="font-extralight font-mono text-center">ID: {userDetails.id}</p>
+          <p className="font-extralight font-mono text-center text-xs">ID: {userDetails.id}</p>
         </Card>
       </div>
     )

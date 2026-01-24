@@ -104,7 +104,7 @@ export default function CreatePostPage() {
   return (
     <div className="min-h-screen">
       <NavigationBar />
-      <Card className="max-w-2xl mx-auto mt-8 p-6">
+      <Card className="max-w-xs sm:max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-6xl mx-auto mt-8 p-6">
         <CardTitle className="text-3xl font-bold mb-6">Create New Post</CardTitle>
 
         <CardContent className="flex flex-col space-y-4">

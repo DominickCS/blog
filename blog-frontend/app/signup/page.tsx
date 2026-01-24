@@ -3,7 +3,7 @@
 import NavigationBar from "@/components/ui/navbar"
 import React, { useState } from "react"
 import Signup from "@/app/_serverActions/(auth)/signup"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -92,7 +92,7 @@ export default function LoginPage() {
   return (
     <div className="">
       <NavigationBar />
-      <Card className="mt-8 md:max-w-xl mx-auto max-w-3xs">
+      <Card className="mt-8 sm:max-w-lg md:max-w-2xl mx-auto max-w-xs lg:max-w-4xl xl:max-w-6xl">
         <CardHeader>
           <CardTitle>Register for an account</CardTitle>
           <CardDescription>Enter your credentials</CardDescription>
@@ -111,10 +111,10 @@ export default function LoginPage() {
             <Button disabled={loading} type="submit" className="hover:cursor-pointer mt-4" >{loading ? "Signing up..." : "Sign Up"}</Button>
           </form>
         </CardContent>
+        <CardFooter className={loading || message.text.length > 0 ? "mx-auto" : "hidden"}>
+          {message && message.type === "success" ? <p className="text-green-500/60 font-medium">{message.text}</p> : <p className="text-red-500/60">{message.text}</p>}
+        </CardFooter>
       </Card>
-      <div className="mx-auto text-center">
-        {message && message.type === "success" ? <p className="text-green-500/60 font-medium">{message.text}</p> : <p className="text-red-500/60">{message.text}</p>}
-      </div>
     </div>
   )
 }

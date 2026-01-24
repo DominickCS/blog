@@ -41,7 +41,7 @@ export default function NavigationBar() {
       <Link href={'/'} className="mx-4 hover:text-white duration-300">Developing with DominickCS_</Link>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Account</NavigationMenuTrigger>
+          <NavigationMenuTrigger className="hover:text-white duration-300">Account</NavigationMenuTrigger>
           <NavigationMenuContent>
             {!isLoggedIn ?
               <ul className="w-60 md:w-100">
@@ -51,7 +51,7 @@ export default function NavigationBar() {
                 </ListItem>
               </ul>
               :
-              <ul className="w-100 p-2 lg:grid-cols-[.75fr_1fr]">
+              <ul className="w-60 md:w-100">
                 <ListItem href="/create-post" title="+ New Post">
                 </ListItem>
                 <ListItem href="/profile" title="Profile">
@@ -74,11 +74,11 @@ function ListItem({
   ...props
 }: React.ComponentProps<"a">) {
   return (
-    <li>
+    <li className="text-center">
       <NavigationMenuLink asChild>
         <a
           className={cn(
-            "hover:bg-accent block text-main-foreground select-none rounded-base border-2 border-transparent p-2 leading-none no-underline outline-hidden transition-colors hover:border-border",
+            "hover:bg-accent block text-main-foreground select-none rounded-base border-2 border-transparent p-2 leading-none no-underline outline-hidden transition-colors hover:border-border hover:text-white duration-300",
             className,
           )}
           {...props}

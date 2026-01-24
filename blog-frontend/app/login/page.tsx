@@ -85,7 +85,7 @@ export default function LoginPage() {
   return (
     <div>
       <NavigationBar />
-      <Card className="mt-8 md:max-w-xl mx-auto max-w-3xs">
+      <Card className="mt-8 sm:max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto max-w-xs">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
           <CardDescription>Enter your credentials</CardDescription>
