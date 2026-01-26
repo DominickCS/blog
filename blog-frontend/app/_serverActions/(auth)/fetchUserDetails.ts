@@ -10,7 +10,14 @@ export default async function FetchUserDetails() {
         'Content-Type': 'application/json',
       },
     })
-    return response.data.json()
+
+    if (response.unauthorized) {
+      return {
+        isError: true, message: "You must be signed in to perform this action."
+      }
+    }
+
+    return { isError: false, data: await response.data.json(), message: "Successfully fetched user details." }
   } catch (error) {
     console.log(error)
   }

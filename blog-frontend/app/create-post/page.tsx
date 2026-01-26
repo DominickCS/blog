@@ -60,10 +60,15 @@ export default function CreatePostPage() {
 
   function handleTagAdd() {
     if (tagInput.trim()) {
-      const tagWithHash = tagInput.startsWith('#') ? tagInput : `#${tagInput}`
-      setTags(prev => [...prev, tagWithHash])
-      setTagInput("")
+      // Check if the input contains spaces (multiple words)
+      if (tagInput.trim().includes(' ')) {
+        setErrors(prev => ({ ...prev, tags: 'Tags must be a single word' }));
+        return;
+      }
 
+      const tagWithHash = tagInput.startsWith('#') ? tagInput : `#${tagInput}`;
+      setTags(prev => [...prev, tagWithHash]);
+      setTagInput("");
       if (errors.tags) {
         setErrors(prev => ({ ...prev, tags: '' }));
       }

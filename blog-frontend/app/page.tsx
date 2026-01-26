@@ -80,7 +80,7 @@ export default function HomePage() {
 
             return (
               <Link key={blogPost.id} href={`/post/${blogPost.id}`}>
-                <Card key={blogPost.id} className="hover:scale-105 duration-200 bg-white my-12 mx-auto max-w-xs md:max-w-2xl lg:max-w-4xl xl:max-w-6xl md:py-32">
+                <Card key={blogPost.id} className="hover:scale-105 duration-200 bg-white my-12 mx-auto max-w-xs md:max-w-2xl lg:max-w-4xl xl:max-w-6xl md:py-8">
                   <CardHeader>
                     <CardTitle className="text-xl">{blogPost.blogTitle}</CardTitle>
                     <CardDescription className="font-extralight mb-2 text-sm">Published on {date}</CardDescription>

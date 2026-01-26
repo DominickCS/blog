@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,7 +49,10 @@ public class BlogPostService {
       BlogPost blogPost = new BlogPost();
       LocalDateTime currentDate = LocalDateTime.now();
       blogPost.setId(blogPostDTO.getId());
-      blogPost.setBlogTags(blogPostDTO.getBlogTags());
+      blogPost.setBlogTags(
+          blogPostDTO.getBlogTags().stream()
+              .map(String::toLowerCase)
+              .collect(Collectors.toList()));
       blogPost.setBlogBody(blogPostDTO.getBlogBody());
       blogPost.setBlogComments(null);
       blogPost.setBlogHeaderURL(blogPostDTO.getBlogHeaderURL());

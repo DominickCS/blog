@@ -25,7 +25,7 @@ export default function UserProfilePage() {
     const fetchUserProfile = async () => {
       try {
         const response = await FetchUserDetails()
-        setUserDetails(response)
+        setUserDetails(response?.data)
       } catch (error) {
       } finally {
         setLoading(false)

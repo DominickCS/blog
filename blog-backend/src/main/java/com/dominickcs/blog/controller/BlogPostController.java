@@ -1,7 +1,6 @@
 package com.dominickcs.blog.controller;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -18,8 +17,6 @@ import com.dominickcs.blog.entity.User;
 import com.dominickcs.blog.repository.BlogPostRepository;
 import com.dominickcs.blog.repository.UserRepository;
 import com.dominickcs.blog.service.BlogPostService;
-
-import jakarta.transaction.Transactional;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

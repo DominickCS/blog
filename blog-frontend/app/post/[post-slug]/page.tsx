@@ -118,11 +118,11 @@ export default function BlogPost() {
     const fetchUser = async () => {
       try {
         const response = await FetchUserDetails()
-        setUserPermissions(await response.authorities.map(role => role.authority))
-        setUserLikeList(await response.likedPosts)
-        setUserCommentLikeList(await response.likedComments)
-        setUserReplyLikeList(await response.likedReplies)
-        setUserBookmarksList(await response.savedPosts)
+        setUserPermissions(await response?.data.authorities.map(role => role.authority))
+        setUserLikeList(await response?.data.likedPosts)
+        setUserCommentLikeList(await response?.data.likedComments)
+        setUserReplyLikeList(await response?.data.likedReplies)
+        setUserBookmarksList(await response?.data.savedPosts)
       } catch (error) {
         console.log(error)
       } finally {
@@ -225,11 +225,11 @@ export default function BlogPost() {
           <CardHeader className="flex items-center justify-center">
             <CardTitle className="text-center text-3xl mb-4">{blogPost.blogTitle}</CardTitle>
           </CardHeader>
-          <CardDescription className="mx-auto text-center">
+          <CardDescription className="flex content-center items-center mx-auto text-center">
             {blogPost.blogTags && blogPost.blogTags.map((tag, id) => {
-              return <p className="text-purple-300 hover:text-purple-600 duration-300 hover:tracking-widest" key={id}><Link href={`/tag/${String(tag).substring(1).toLowerCase()}`}>{tag}</Link></p>
+              return <p className="mx-2 text-purple-300 hover:text-purple-600 duration-300 hover:tracking-widest" key={id}><Link href={`/tag/${String(tag).substring(1).toLowerCase()}`}>{tag}</Link></p>
             })}
-            <p className="mt-2 p-2 border-t border-black/20">{date}</p>
+            <p className="mx-2 px-4 border-l border-black/20">{date}</p>
           </CardDescription>
           <CardContent className="mt-4 mb-16">
             <p className="whitespace-pre-wrap md:text-lg">{blogPost.blogBody}</p>
@@ -357,17 +357,17 @@ export default function BlogPost() {
                   : "hover:scale-130 hover:cursor-pointer duration-500"
               } icon="material-symbols:bookmark"></Icon> {blogPost.blogSaveCount}</p>
           </CardFooter>
-          {userPermissions.includes("ROLE_ADMIN") ?
+          {userPermissions.includes(`ROLE_ADMIN`) ?
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="mx-auto mt-8" variant={"noShadow"}>Manage post</Button>
+                <Button className="hover:cursor-pointer mx-auto mt-8" variant={"noShadow"}>Manage post</Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
+              <DropdownMenuContent>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem disabled>
                     Edit Post
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handlePostDeletion}>
+                  <DropdownMenuItem className="hover:cursor-pointer" onClick={handlePostDeletion}>
                     Delete Post
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
